@@ -1,0 +1,36 @@
+{
+  "preguntas": [
+    {
+      "pregunta": "¿Cuál es el presupuesto exclusivo de cimentación?",
+      "respuesta": "$250,000.00 MXN"
+    },
+    {
+      "pregunta": "¿Quién es responsable técnico de cimentación?",
+      "respuesta": "Ing. Carlos Méndez"
+    },
+    {
+      "pregunta": "¿Qué resistencia tiene el concreto estructural?",
+      "respuesta": "f'c = 300 kg/cm²"
+    },
+    {
+      "pregunta": "¿Cuál es el presupuesto conjunto de instalaciones?",
+      "respuesta": "$175,000.00 MXN"
+    },
+    {
+      "pregunta": "¿Cuánto dura la garantía de impermeabilización?",
+      "respuesta": "5 años"
+    },
+    {
+      "pregunta": "¿Cuánto dura la garantía general de los trabajos?",
+      "respuesta": "12 meses"
+    },
+    {
+      "pregunta": "¿Qué tipo de tubería se usará en la instalación hidráulica?",
+      "respuesta": "PPR"
+    },
+    {
+      "pregunta": "¿Quién autoriza las estimaciones semanales?",
+      "respuesta": "Arq. María López"
+    }
+  ]
+}

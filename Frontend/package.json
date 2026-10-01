@@ -1,0 +1,27 @@
+{
+  "name": "quantia-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:documents": "node --test tests/documentosApiService.test.mjs",
+    "test:documents:view": "node --test tests/documentosView.test.mjs",
+    "test:plan-editor": "node --test tests/planEditorView.test.mjs",
+    "test:documents:integration": "node tests/documentosApiService.integration.mjs"
+  },
+  "dependencies": {
+    "konva": "^10.3.2",
+    "lucide-vue-next": "^1.0.0",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.38",
+    "vue-konva": "^3.4.0",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2"
+  }
+}

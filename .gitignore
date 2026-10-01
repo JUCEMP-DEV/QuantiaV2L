@@ -1,0 +1,59 @@
+node_modules
+dist
+.env
+.env.local
+.env.*
+!.env.*.example
+.vercel
+.tools/
+.worktrees/
+.local-runtime/
+.local-tools/
+.venv*/
+
+# Python runtime and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.bak_*
+Backend/tests/evidence/local_*.json
+Backend/tests/output/
+Docs extraidos para revision/
+motor_simulation_service_completo.txt
+
+# OS metadata
+._*
+
+# Local document uploads/staging (may contain user data)
+tmp_documents/
+
+# Quantia runtime vision cache
+Backend/cache/
+
+# Local 03.2 replay packages
+Miguel_H_Pipeline_03_2_Replay.zip
+
+# QuantiaSpatialV1 - repositorio externo enlazado mediante Junction
+Backend/app/quantia_spatialV1/
+
+# Respaldo local previo a crear el Junction
+Backend/app/quantia_spatialV1_BACKUP/
+# Git local recovery
+.git.bak
+
+# Local editor / workspace files
+.obsidian/
+.trash/
+.vscode/
+tmp/
+
+# Pytest temporary workdirs
+Backend/.pytest_call2_tmp/
+
+# Local backup archives
+Backend/app/prompts/prompts.zip
+Backend/app/quantia_spatial.zip
+Backend/app/quantia_spatialV1.zip

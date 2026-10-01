@@ -1,0 +1,38 @@
+{
+  "documento": "PROYECTO HABITACIONAL ENCINOS",
+  "datos_esperados": [
+    "Mérida, Yucatán",
+    "$250,000.00 MXN",
+    "30 días naturales",
+    "Arq. María López",
+    "128 metros cuadrados",
+    "250 kg/cm²",
+    "12 meses"
+  ],
+  "preguntas": [
+    {
+      "pregunta": "¿Cuál es el presupuesto de cimentación?",
+      "respuesta": "$250,000.00 MXN"
+    },
+    {
+      "pregunta": "¿Cuál es el plazo de ejecución?",
+      "respuesta": "30 días naturales"
+    },
+    {
+      "pregunta": "¿Quién es la responsable técnica?",
+      "respuesta": "Arq. María López"
+    },
+    {
+      "pregunta": "¿Qué resistencia tendrá el concreto?",
+      "respuesta": "f'c = 250 kg/cm²"
+    },
+    {
+      "pregunta": "¿Cuánto dura la garantía?",
+      "respuesta": "12 meses"
+    }
+  ],
+  "criterio_ocr": {
+    "txt_y_pdf_embebido": "100% de los datos esperados",
+    "imagen_y_pdf_escaneado": "al menos 85% de similitud y todos los valores numéricos esenciales"
+  }
+}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"><title>Prueba local editor 04 — datos ficticios</title></head>
+<body><div style="background:#fef3c7;padding:8px">PRUEBA LOCAL — datos ficticios; no guarda proyectos ni utiliza una cuenta.</div><div id="app"></div>
+<script type="module">
+import {createApp} from 'vue';
+import {createPinia} from 'pinia';
+import Konva from 'konva';
+import {createRouter,createMemoryHistory} from 'vue-router';
+import View from '/src/modules/vivienda/views/workflow/04DisenoManualView.vue';
+import {useViviendaStore} from '/src/modules/vivienda/store/viviendaStore.js';
+import fixture from './fixtures/manual04.json';
+import '/src/styles/global.css';
+const router=createRouter({history:createMemoryHistory(),routes:[{path:'/:pathMatch(.*)*',component:View}]});
+const pinia=createPinia(),app=createApp(View);app.use(pinia);app.use(router);
+const store=useViviendaStore();store.$patch(JSON.parse(JSON.stringify(fixture)));
+// Only this isolated test harness exposes its synthetic model to the smoke test.
+window.manual04FixtureStore=store;
+window.manual04TestStage=()=>Konva.stages[0];
+await router.push('/vivienda/workflow/diseno-vivienda/manual');await router.isReady();app.mount('#app');
+</script></body></html>

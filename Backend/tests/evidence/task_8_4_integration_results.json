@@ -1,0 +1,32 @@
+{
+  "environment": "local",
+  "frontend_client": "Frontend/src/modules/vivienda/services/documentosApiService.js",
+  "backend": "FastAPI http://127.0.0.1:8000",
+  "document": "Backend/tests/fixtures/rag_real/documento_rag_control.txt",
+  "embedding_backend": "hashing",
+  "vector_store_backend": "local",
+  "llm_model": "llama3.2:3b",
+  "flow": [
+    { "operation": "llm_health", "status": 200, "passed": true },
+    { "operation": "upload_and_ocr", "status": 200, "passed": true },
+    { "operation": "process_and_index", "status": 200, "passed": true, "chunk_count": 5 },
+    {
+      "operation": "ask",
+      "status": 200,
+      "passed": true,
+      "question": "¿Cuál es el presupuesto exclusivo de cimentación?",
+      "answer_pattern": "$250,000.00 MXN [chunk_id]",
+      "matches": 3
+    },
+    { "operation": "list_ready_document", "status": 200, "passed": true },
+    { "operation": "delete", "status": 200, "passed": true },
+    { "operation": "verify_deleted", "status": 200, "passed": true }
+  ],
+  "elapsed_seconds": 27.3,
+  "cleanup_confirmed": true,
+  "notes": [
+    "Una primera corrida recibió un 503 transitorio durante la consulta; el bloque finally eliminó el documento y confirmó la lista limpia.",
+    "El reintento inmediato completó todo el flujo sin errores.",
+    "No se requirió desplegar Vercel ni Render para esta validación local."
+  ]
+}

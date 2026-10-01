@@ -1,0 +1,78 @@
+{
+  "ocr_engine": "tesseract",
+  "results": [
+    {
+      "file": "documento_control.txt",
+      "extension": ".txt",
+      "page_count": 1,
+      "elapsed_ms": 0.61,
+      "similarity": 1.0,
+      "expected_data_count": 7,
+      "matched_data_count": 7,
+      "matched_data": [
+        "Mérida, Yucatán",
+        "$250,000.00 MXN",
+        "30 días naturales",
+        "Arq. María López",
+        "128 metros cuadrados",
+        "250 kg/cm²",
+        "12 meses"
+      ],
+      "extracted_text": "PROYECTO HABITACIONAL ENCINOS\n\nUbicación: Mérida, Yucatán.\nPresupuesto de cimentación: $250,000.00 MXN.\nPlazo de ejecución: 30 días naturales.\nResponsable técnico: Arq. María López.\nÁrea construida: 128 metros cuadrados.\n\nLa cimentación utilizará concreto de resistencia f'c = 250 kg/cm².\nLa garantía de los trabajos será de 12 meses."
+    },
+    {
+      "file": "documento_texto_embebido.pdf",
+      "extension": ".pdf",
+      "page_count": 1,
+      "elapsed_ms": 548.37,
+      "similarity": 1.0,
+      "expected_data_count": 7,
+      "matched_data_count": 7,
+      "matched_data": [
+        "Mérida, Yucatán",
+        "$250,000.00 MXN",
+        "30 días naturales",
+        "Arq. María López",
+        "128 metros cuadrados",
+        "250 kg/cm²",
+        "12 meses"
+      ],
+      "extracted_text": "PROYECTO HABITACIONAL ENCINOS\nUbicación: Mérida, Yucatán.\nPresupuesto de cimentación: $250,000.00 MXN.\nPlazo de ejecución: 30 días naturales.\nResponsable técnico: Arq. María López.\nÁrea construida: 128 metros cuadrados.\nLa cimentación utilizará concreto de resistencia f'c = 250 kg/cm².\nLa garantía de los trabajos será de 12 meses."
+    },
+    {
+      "file": "imagen_escaneada.png",
+      "extension": ".png",
+      "page_count": 1,
+      "elapsed_ms": 828.37,
+      "similarity": 0.9799,
+      "expected_data_count": 5,
+      "matched_data_count": 5,
+      "matched_data": [
+        "Mérida, Yucatán",
+        "$250,000.00 MXN",
+        "30 días naturales",
+        "Arq. María López",
+        "128 metros cuadrados"
+      ],
+      "extracted_text": "PROYECTO HABITACIONAL ENCINOS\n\nUbicación: Mérida, Yucatán.\nPresupuesto de cimentación: $250,000.00 MXN.\n\nPlazo de ejecución: 30 días naturales.\nResponsable técnico: Arq. María López.\n\nÁrea construida: 128 metros cuadrados.\n\nPágina 1"
+    },
+    {
+      "file": "documento_escaneado.pdf",
+      "extension": ".pdf",
+      "page_count": 2,
+      "elapsed_ms": 2667.87,
+      "similarity": 0.9298,
+      "expected_data_count": 7,
+      "matched_data_count": 6,
+      "matched_data": [
+        "Mérida, Yucatán",
+        "$250,000.00 MXN",
+        "30 días naturales",
+        "Arq. María López",
+        "128 metros cuadrados",
+        "12 meses"
+      ],
+      "extracted_text": "PROYECTO HABITACIONAL ENCINOS\n\nUbicación: Mérida, Yucatán.\nPresupuesto de cimentación: $250,000.00 MXN.\n\nPlazo de ejecución: 30 días naturales.\nResponsable técnico: Arq. María López.\n\nÁrea construida: 128 metros cuadrados.\n\nPágina 1\n\nPROYECTO HABITACIONAL ENCINOS\n\nLa cimentación utilizará concreto de resistencia f'c = 250 kg/cm?.\n\nLa garantía de los trabajos será de 12 meses.\n\nPágina 2"
+    }
+  ]
+}

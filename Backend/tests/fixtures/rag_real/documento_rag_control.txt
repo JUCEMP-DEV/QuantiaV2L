@@ -1,0 +1,22 @@
+PROYECTO HABITACIONAL ENCINOS — MEMORIA DE CONTROL
+
+1. Datos generales y preliminares
+El proyecto se ubica en Mérida, Yucatán, sobre un terreno urbano de 240 metros cuadrados. La vivienda tendrá 128 metros cuadrados de construcción. Los trabajos preliminares incluyen limpieza, trazo, nivelación y una bodega temporal. El presupuesto asignado a preliminares es de $48,500.00 MXN y su ejecución deberá concluir en 8 días naturales. La supervisión general corresponde a la Arq. María López, quien también autorizará las estimaciones semanales y cualquier modificación al programa base.
+
+2. Cimentación
+La cimentación será de zapatas aisladas y trabes de liga. Se utilizará concreto con resistencia f'c = 250 kg/cm² y acero de refuerzo grado 42. El presupuesto exclusivo de cimentación es de $250,000.00 MXN. El plazo aprobado para esta etapa es de 30 días naturales y su responsable técnico es el Ing. Carlos Méndez. Antes del colado se verificarán ejes, recubrimientos y niveles; los resultados deberán asentarse en la bitácora de obra.
+
+3. Estructura
+La estructura combinará columnas y trabes de concreto reforzado con losa aligerada. Para esta etapa se autorizaron $480,000.00 MXN y un plazo de 45 días naturales. La resistencia del concreto estructural será f'c = 300 kg/cm², distinta de la especificada para cimentación. La supervisión estructural estará a cargo de la Ing. Elena Ruiz. No se permitirá retirar puntales antes del tiempo indicado por el laboratorio de control de calidad.
+
+4. Albañilería
+Los muros interiores serán de block hueco de 12 centímetros y los exteriores de block de 15 centímetros. El presupuesto de albañilería asciende a $185,000.00 MXN, con una duración prevista de 25 días naturales. Se deberán revisar plomos, niveles y encuentros antes de colocar recubrimientos. El responsable de esta partida será el Arq. Roberto Díaz. Las piezas dañadas o saturadas de humedad deberán sustituirse antes de su colocación.
+
+5. Instalaciones
+La instalación hidráulica utilizará tubería PPR y la sanitaria PVC serie 25. La instalación eléctrica considera centro de carga de 24 circuitos, contactos polarizados y preparación para paneles solares. El presupuesto conjunto de instalaciones es de $175,000.00 MXN y el plazo es de 20 días naturales. La responsable de coordinación será la Ing. Laura Torres. Todas las redes deberán probarse antes de cerrar ranuras o colocar plafones.
+
+6. Acabados
+Los pisos serán de porcelanato en áreas interiores y acabado antiderrapante en patios. Los muros recibirán sellador y pintura vinílica lavable. Para acabados se aprobaron $320,000.00 MXN y 35 días naturales de ejecución. El color definitivo se elegirá mediante una muestra física autorizada por el cliente. La garantía específica de impermeabilización será de 5 años, mientras que la garantía general de los trabajos será de 12 meses a partir de la entrega.
+
+7. Seguridad y control
+El personal deberá utilizar casco, chaleco, botas y protección adicional según la actividad. Se realizarán reuniones de seguridad cada lunes y se registrarán incidentes, avances y pruebas en la bitácora. Los residuos se separarán por tipo y se retirarán dos veces por semana. Cualquier cambio de material, costo o plazo requiere autorización escrita; una instrucción verbal no modifica el contrato ni los datos aprobados en esta memoria.

@@ -1,0 +1,268 @@
+{
+  "datosGeneralesObra": {
+    "niveles": 2,
+    "alturaNivel1M": 3,
+    "alturaNivel2M": 3,
+    "sistemaEstructural": "tradicional",
+    "tipoCimentacion": "mamposteria_corrida",
+    "engineInputs": {
+      "modo_diseno": "dibujar"
+    }
+  },
+  "clasificacion": {
+    "tipoIntervencion": "obra_nueva"
+  },
+  "alcance": {
+    "alcance": "completo"
+  },
+  "estructuraEspacial": {
+    "sourceMode": "manual",
+    "units": "m",
+    "niveles": [
+      {
+        "id": "L0",
+        "key": "planta_baja",
+        "heightM": 3,
+        "elevationM": 0,
+        "name": "Planta baja"
+      },
+      {
+        "id": "L1",
+        "key": "segunda_planta",
+        "elevationM": 3,
+        "name": "Planta alta",
+        "heightM": 3
+      }
+    ],
+    "muros": [
+      {
+        "id": "W",
+        "levelId": "L0",
+        "confirmed": true,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 12,
+          "y": 0
+        },
+        "heightM": 3,
+        "thicknessM": 0.15,
+        "material": "BRICK",
+        "structuralRole": "LOAD_BEARING",
+        "spaceAId": "ROOM"
+      },
+      {
+        "id": "W2",
+        "levelId": "L0",
+        "confirmed": true,
+        "start": {
+          "x": 12,
+          "y": 0
+        },
+        "end": {
+          "x": 12,
+          "y": 6
+        },
+        "heightM": 3,
+        "thicknessM": 0.15,
+        "material": "BRICK",
+        "structuralRole": "LOAD_BEARING",
+        "spaceAId": "ROOM"
+      },
+      {
+        "id": "W3",
+        "levelId": "L0",
+        "confirmed": true,
+        "start": {
+          "x": 12,
+          "y": 6
+        },
+        "end": {
+          "x": 0,
+          "y": 6
+        },
+        "heightM": 3,
+        "thicknessM": 0.15,
+        "material": "BRICK",
+        "structuralRole": "LOAD_BEARING",
+        "spaceAId": "ROOM"
+      },
+      {
+        "id": "W4",
+        "levelId": "L0",
+        "confirmed": true,
+        "start": {
+          "x": 0,
+          "y": 6
+        },
+        "end": {
+          "x": 0,
+          "y": 0
+        },
+        "heightM": 3,
+        "thicknessM": 0.15,
+        "material": "BRICK",
+        "structuralRole": "LOAD_BEARING",
+        "spaceAId": "ROOM"
+      }
+    ],
+    "espacios": [
+      {
+        "id": "ROOM",
+        "name": "Ejercicio manual",
+        "nombre": "Ejercicio manual",
+        "usageCode": "estancia",
+        "tipo": "estancia",
+        "levelId": "L0",
+        "confirmed": true,
+        "geometry": {
+          "type": "polygon",
+          "vertices": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 12,
+              "y": 0
+            },
+            {
+              "x": 12,
+              "y": 6
+            },
+            {
+              "x": 0,
+              "y": 6
+            }
+          ]
+        },
+        "finishes": [
+          {
+            "id": "FLOOR",
+            "side": "FLOOR",
+            "finish": "CERAMIC",
+            "material": "CERAMIC",
+            "state": "CONFIRMED"
+          }
+        ]
+      }
+    ],
+    "completeness": {
+      "openings": "COMPLETE",
+      "stairs": "COMPLETE"
+    },
+    "puertas": [
+      {
+        "wallId": "W",
+        "levelId": "L0",
+        "confirmed": true,
+        "heightM": 2.1,
+        "widthM": 1,
+        "operation": "HINGED",
+        "id": "D",
+        "kind": "DOOR",
+        "position": 0.1,
+        "material": "WOOD",
+        "usage": "INTERIOR"
+      },
+      {
+        "wallId": "W",
+        "levelId": "L0",
+        "confirmed": true,
+        "heightM": 2.1,
+        "widthM": 1,
+        "operation": "HINGED",
+        "id": "A",
+        "kind": "DOOR",
+        "position": 0.3,
+        "material": "ALUMINUM",
+        "glazing": "GLASS",
+        "usage": "MAIN_ENTRANCE"
+      },
+      {
+        "wallId": "W",
+        "levelId": "L0",
+        "confirmed": true,
+        "heightM": 2.1,
+        "widthM": 3,
+        "operation": "HINGED",
+        "id": "G",
+        "kind": "GARAGE_DOOR",
+        "position": 0.6,
+        "material": "STEEL",
+        "usage": "VEHICLE_ACCESS"
+      }
+    ],
+    "ventanas": [
+      {
+        "wallId": "W",
+        "levelId": "L0",
+        "confirmed": true,
+        "heightM": 1,
+        "widthM": 1.2,
+        "operation": "HINGED",
+        "id": "V",
+        "kind": "WINDOW",
+        "position": 0.9,
+        "sillHeightM": 1,
+        "material": "ALUMINUM",
+        "glazing": "GLASS"
+      }
+    ],
+    "escaleras": [
+      {
+        "id": "S",
+        "confirmed": true,
+        "levelFromId": "L0",
+        "levelToId": "L1",
+        "type": "STRAIGHT",
+        "system": "CONCRETE",
+        "hasSlabVoid": true,
+        "railingSide": "LEFT",
+        "railingMaterial": "STEEL",
+        "geometry": {
+          "vertices": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 5
+            },
+            {
+              "x": 0,
+              "y": 5
+            }
+          ]
+        },
+        "flights": [
+          {
+            "id": "F",
+            "widthM": 1,
+            "riserCount": 18,
+            "pathM": [
+              {
+                "x": 0.5,
+                "y": 1
+              },
+              {
+                "x": 0.5,
+                "y": 5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "projectId": "DEMO_MANUAL_04",
+    "schemaVersion": "quantia-editor-1.0",
+    "activeLevelId": "L0"
+  }
+}

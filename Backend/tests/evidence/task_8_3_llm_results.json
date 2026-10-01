@@ -1,0 +1,309 @@
+{
+  "model": "llama3.2:3b",
+  "context_length": 2048,
+  "max_tokens": 64,
+  "timeout_seconds": 60.0,
+  "temperature": 0.0,
+  "chunk_size": 150,
+  "overlap": 30,
+  "top_k": 3,
+  "chunk_count": 5,
+  "results": [
+    {
+      "index": 1,
+      "kind": "answerable",
+      "question": "¿Cuál es el presupuesto exclusivo de cimentación?",
+      "expected": "$250,000.00 MXN",
+      "answer": "$250,000.00 MXN [control-llm-0]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-0"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 33030.3,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.350667
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.251679
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.228626
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "kind": "answerable",
+      "question": "¿Quién es responsable técnico de cimentación?",
+      "expected": "Ing. Carlos Méndez",
+      "answer": "Ing. Carlos Méndez [control-llm-0]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-0"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 30776.8,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.279558
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.213036
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.164163
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "kind": "answerable",
+      "question": "¿Qué resistencia tiene el concreto estructural?",
+      "expected": "f'c = 300 kg/cm²",
+      "answer": "f'c = 300 kg/cm² [control-llm-1]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-1"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 37086.2,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.065322
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.050336
+        },
+        {
+          "chunk_id": "control-llm-3",
+          "score": 0.046756
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "kind": "answerable",
+      "question": "¿Cuál es el presupuesto conjunto de instalaciones?",
+      "expected": "$175,000.00 MXN",
+      "answer": "$175,000.00 MXN [control-llm-2]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-2"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 42755.43,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.365509
+        },
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.261163
+        },
+        {
+          "chunk_id": "control-llm-3",
+          "score": 0.228518
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "kind": "answerable",
+      "question": "¿Cuánto dura la garantía de impermeabilización?",
+      "expected": "5 años",
+      "answer": "5 años. [control-llm-3]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-3"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 43267.6,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-3",
+          "score": 0.355801
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.307719
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.251716
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "kind": "answerable",
+      "question": "¿Cuánto dura la garantía general de los trabajos?",
+      "expected": "12 meses",
+      "answer": "12 meses. [control-llm-3]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-3"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 4840.51,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-3",
+          "score": 0.435271
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.304056
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.253045
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "kind": "answerable",
+      "question": "¿Qué tipo de tubería se usará en la instalación hidráulica?",
+      "expected": "PPR",
+      "answer": "PPR. [control-llm-2]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-2"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 5529.81,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-3",
+          "score": 0.338405
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.315187
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.308109
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "kind": "answerable",
+      "question": "¿Quién autoriza las estimaciones semanales?",
+      "expected": "Arq. María López",
+      "answer": "La Arq. María López. [control-llm-0]",
+      "expected_token_coverage": 1.0,
+      "refusal_token_coverage": null,
+      "cited_chunk_ids": [
+        "control-llm-0"
+      ],
+      "citation_present": true,
+      "elapsed_ms": 41619.15,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.112387
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.039253
+        },
+        {
+          "chunk_id": "control-llm-2",
+          "score": -0.0
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "kind": "unanswerable",
+      "question": "¿Cuál es la marca de pintura autorizada?",
+      "expected": null,
+      "answer": "No hay informacion suficiente en el documento.",
+      "expected_token_coverage": null,
+      "refusal_token_coverage": 1.0,
+      "cited_chunk_ids": [],
+      "citation_present": false,
+      "elapsed_ms": 47196.97,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.271814
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.206852
+        },
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.187023
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "kind": "unanswerable",
+      "question": "¿Cuál es la fecha exacta de entrega de la vivienda?",
+      "expected": null,
+      "answer": "No hay informacion suficiente en el documento.",
+      "expected_token_coverage": null,
+      "refusal_token_coverage": 1.0,
+      "cited_chunk_ids": [],
+      "citation_present": false,
+      "elapsed_ms": 33541.34,
+      "passed": true,
+      "matches": [
+        {
+          "chunk_id": "control-llm-2",
+          "score": 0.408704
+        },
+        {
+          "chunk_id": "control-llm-0",
+          "score": 0.369089
+        },
+        {
+          "chunk_id": "control-llm-1",
+          "score": 0.343766
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "answerable_passed": 8,
+    "answerable_total": 8,
+    "unanswerable_refused": 2,
+    "unanswerable_total": 2,
+    "responses_with_citation": 8,
+    "completed_total": 10,
+    "average_latency_ms": 31964.41,
+    "max_latency_ms": 47196.97
+  }
+}
