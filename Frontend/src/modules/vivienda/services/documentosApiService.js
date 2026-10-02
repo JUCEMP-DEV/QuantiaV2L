@@ -5,7 +5,7 @@ export const DOCUMENT_REQUEST_TIMEOUTS = Object.freeze({
   list: 15000,
   upload: 120000,
   process: 180000,
-  spatial: 180000,
+  spatial: 900000,
   basePlan: 60000,
   ask: 120000,
   remove: 30000,
@@ -230,38 +230,13 @@ export function procesarDocumento({ documentId, accessToken, timeoutMs, signal }
 export function analizarPlanoDocumento({
   documentId,
   accessToken,
-  pageNumber = 1,
-  pdfRenderScale = null,
-  ocrStrategy = "auto",
   timeoutMs,
   signal,
 } = {}) {
   const encodedId = requireDocumentId(documentId);
 
-  const params = new URLSearchParams();
-
-  params.set(
-    "page_number",
-    String(pageNumber)
-  );
-
-  if (
-    pdfRenderScale !== null &&
-    pdfRenderScale !== undefined
-  ) {
-    params.set(
-      "pdf_render_scale",
-      String(pdfRenderScale)
-    );
-  }
-
-  params.set(
-    "ocr_strategy",
-    String(ocrStrategy || "auto")
-  );
-
   return documentRequest(
-    `/api/documentos/${encodedId}/analizar-plano?${params.toString()}`,
+    `/api/documentos/${encodedId}/analizar-plano`,
     {
       accessToken,
       operation: "spatial",

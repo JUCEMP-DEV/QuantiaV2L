@@ -6,11 +6,30 @@ from tempfile import NamedTemporaryFile
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Response,
+    UploadFile,
+    status,
+)
 
 from app.core.config import settings
 from app.core.document_auth import DocumentPrincipal, get_document_principal
 from app.core.supabase_client import get_supabase_admin_client
+from app.legacy.quantia_spatial.quantia_spatial_reconstruction_service import (
+    BaseLayerDescriptor,
+    QuantiaSpatialReconstructionService,
+)
+from app.prompts.quantia_extraction_prompt import (
+    QUANTIA_EXTRACTION_PROMPT,
+)
+from app.prompts.quantia_space_localization_prompt import (
+    build_quantia_space_localization_prompt,
+)
 from app.schemas.documentos import (
     DocumentoAskRequest,
     DocumentoAskResponse,
@@ -22,35 +41,6 @@ from app.schemas.documentos import (
     DocumentoQueryResponse,
     DocumentoUploadResponse,
     LLMHealthResponse,
-)
-from app.services.document_repository_service import (
-    DocumentRepository,
-    create_document_repository,
-)
-from app.services.document_policy_service import (
-    DocumentDuplicateError,
-    DocumentPageLimitError,
-    DocumentQuotaError,
-    cleanup_expired_documents,
-    enforce_upload_policy,
-    inspect_document,
-)
-from app.services.document_service import DocumentService
-from app.services.document_storage_service import (
-    DocumentStorage,
-    create_document_storage,
-)
-from app.services.llm_service import LLMServiceError
-from app.services.ocr_service import OCRDependencyError, OCRServiceError
-from app.services.rag_service import RAGService
-
-from typing import Any, Literal
-
-from app.prompts.quantia_extraction_prompt import (
-    QUANTIA_EXTRACTION_PROMPT,
-)
-from app.prompts.quantia_space_localization_prompt import (
-    build_quantia_space_localization_prompt,
 )
 from app.schemas.gemini_extraction_transport import (
     get_gemini_extraction_transport_schema,
@@ -64,17 +54,37 @@ from app.schemas.quantia_spatial_contract import (
 from app.services.cached_gemini_vision_provider import (
     get_cached_gemini_vision_provider,
 )
-from app.legacy.quantia_spatial.quantia_spatial_reconstruction_service import (
-    BaseLayerDescriptor,
-    QuantiaSpatialReconstructionService,
+from app.services.document_policy_service import (
+    DocumentDuplicateError,
+    DocumentPageLimitError,
+    DocumentQuotaError,
+    cleanup_expired_documents,
+    enforce_upload_policy,
+    inspect_document,
 )
+from app.services.document_repository_service import (
+    DocumentRepository,
+    create_document_repository,
+)
+from app.services.document_service import DocumentService
+from app.services.document_storage_service import (
+    DocumentStorage,
+    create_document_storage,
+)
+from app.services.ocr_service import OCRDependencyError, OCRServiceError
 from app.services.plan_document_analyzer import PlanDocumentAnalyzer
+from app.services.quantia_spatial_integration_service import (
+    QuantiaSpatialIntegrationError,
+    QuantiaSpatialIntegrationService,
+)
+from app.services.rag_service import RAGService
 
 router = APIRouter(prefix="/documentos", tags=["documentos"])
 service = DocumentService()
 repository: DocumentRepository = create_document_repository()
 storage: DocumentStorage = create_document_storage()
 rag_service = RAGService()
+spatial_integration_service = QuantiaSpatialIntegrationService()
 
 
 def _create_spatial_reconstruction_service() -> QuantiaSpatialReconstructionService:
@@ -515,20 +525,11 @@ async def process_document_for_rag(
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
-@router.post(
-    "/{document_id}/analizar-plano",
-    response_model=QuantiaSpatialContract,
-)
+@router.post("/{document_id}/analizar-plano")
 def analyze_plan_document(
     document_id: str,
-    page_number: int = 1,
-    pdf_render_scale: float | None = None,
-    ocr_strategy: Literal[
-        "auto",
-        "always",
-    ] = "auto",
     principal: DocumentPrincipal = Depends(get_document_principal),
-):
+) -> dict[str, Any]:
     record = _get_document_record(
         document_id,
         principal,
@@ -543,25 +544,7 @@ def analyze_plan_document(
     }:
         raise HTTPException(
             status_code=415,
-            detail=("El análisis arquitectónico " "solo soporta PDF, JPG y PNG."),
-        )
-
-    if page_number < 1:
-        raise HTTPException(
-            status_code=422,
-            detail="page_number debe ser mayor o igual a 1.",
-        )
-
-    if mime_type == "application/pdf" and pdf_render_scale is None:
-        raise HTTPException(
-            status_code=422,
-            detail=("pdf_render_scale es obligatorio " "para documentos PDF."),
-        )
-
-    if pdf_render_scale is not None and pdf_render_scale <= 0:
-        raise HTTPException(
-            status_code=422,
-            detail="pdf_render_scale debe ser mayor que cero.",
+            detail=("El análisis arquitectónico solo soporta PDF, JPG y PNG."),
         )
 
     try:
@@ -570,38 +553,23 @@ def analyze_plan_document(
             object_path=str(record.get("storage_object_path") or ""),
         )
 
-        base_layer = BaseLayerDescriptor(
-            id=(f"{document_id}" f"-PAGE-{page_number}"),
-            nombre=str(record.get("original_file_name") or "documento"),
-            referencia=None,
-            visible=True,
-            bloqueado=True,
-            ocultable=True,
-            bloqueable=True,
-        )
-
-        reconstruction_service = _create_spatial_reconstruction_service()
-
-        result = reconstruction_service.reconstruct_page(
+        return spatial_integration_service.analyze(
             document_bytes=document_bytes,
             mime_type=mime_type,
-            page_number=page_number,
-            base_layer=base_layer,
-            pdf_render_scale=pdf_render_scale,
-            ocr_strategy=ocr_strategy,
-            thickness_evidence=None,
-            domain_rule_targets=None,
+            source_document_id=document_id,
+            source_file_name=str(record.get("original_file_name") or "documento"),
+            # Se conectará aquí
+            # QUANTIA_02_03_SPATIAL_CONTEXT_V1.
+            project_site_context=None,
         )
-
-        return result.contract
 
     except FileNotFoundError as exc:
         raise HTTPException(
             status_code=404,
-            detail="Archivo original no encontrado.",
+            detail=("Archivo original no encontrado."),
         ) from exc
 
-    except ValueError as exc:
+    except QuantiaSpatialIntegrationError as exc:
         raise HTTPException(
             status_code=422,
             detail=str(exc),
@@ -613,7 +581,7 @@ def analyze_plan_document(
     except Exception as exc:
         raise HTTPException(
             status_code=500,
-            detail=str(exc),
+            detail=(f"Quantia Spatial no pudo completar el análisis: {exc}"),
         ) from exc
 
 
@@ -665,9 +633,7 @@ def get_plan_base_raster(
             document_bytes=document_bytes,
             mime_type=mime_type,
             render_scale=(
-                float(pdf_render_scale)
-                if mime_type == "application/pdf"
-                else 1.0
+                float(pdf_render_scale) if mime_type == "application/pdf" else 1.0
             ),
         )
         raster = next(

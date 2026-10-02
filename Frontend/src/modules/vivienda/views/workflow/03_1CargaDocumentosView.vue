@@ -1,6 +1,9 @@
 <template>
-  <QuantiaWorkflowLayout :step="3" title="3.1 Carga de documentos"
-    subtitle="Sube los planos y documentos de tu proyecto para que la IA los analice.">
+  <QuantiaWorkflowLayout
+    :step="3"
+    title="3.1 Carga de documentos"
+    subtitle="Sube los planos y documentos de tu proyecto para que la IA los analice."
+  >
     <!-- =====================================================
          NOTA INFORMATIVA
          ===================================================== -->
@@ -13,9 +16,8 @@
         <strong>Puedes cargar varios archivos</strong>
 
         <p>
-          Quantia utilizará los documentos cargados para identificar
-          planos e información relevante antes de pasar a la revisión
-          con inteligencia artificial.
+          Quantia utilizará los documentos cargados para identificar planos e información
+          relevante antes de pasar a la revisión con inteligencia artificial.
         </p>
       </div>
     </section>
@@ -23,41 +25,48 @@
     <!-- =====================================================
          ZONA DE CARGA
          ===================================================== -->
-    <section class="upload-zone" :class="{
-      dragging: dragActive,
-      uploading,
-    }" @dragenter.prevent="dragActive = true" @dragover.prevent="dragActive = true"
-      @dragleave.prevent="handleDragLeave" @drop.prevent="dropFiles">
+    <section
+      class="upload-zone"
+      :class="{
+        dragging: dragActive,
+        uploading,
+      }"
+      @dragenter.prevent="dragActive = true"
+      @dragover.prevent="dragActive = true"
+      @dragleave.prevent="handleDragLeave"
+      @drop.prevent="dropFiles"
+    >
       <div class="upload-icon">
         <QuantiaIcon name="upload" :size="34" :stroke-width="1.7" />
       </div>
 
       <div class="upload-copy">
-        <span class="section-tag">
-          CARGA DE DOCUMENTOS
-        </span>
+        <span class="section-tag"> CARGA DE DOCUMENTOS </span>
 
-        <h2>
-          Arrastra y suelta tus archivos aquí
-        </h2>
+        <h2>Arrastra y suelta tus archivos aquí</h2>
 
-        <p>
-          También puedes seleccionarlos directamente
-          desde tu equipo.
-        </p>
+        <p>También puedes seleccionarlos directamente desde tu equipo.</p>
       </div>
 
-      <input ref="input" type="file" multiple accept=".pdf,.png,.jpg,.jpeg" hidden @change="pickFiles" />
+      <input
+        ref="input"
+        type="file"
+        multiple
+        accept=".pdf,.png,.jpg,.jpeg"
+        hidden
+        @change="pickFiles"
+      />
 
-      <button type="button" class="select-files-btn" :disabled="uploading" @click="input?.click()">
+      <button
+        type="button"
+        class="select-files-btn"
+        :disabled="uploading"
+        @click="input?.click()"
+      >
         <QuantiaIcon name="folder" :size="18" />
 
         <span>
-          {{
-            uploading
-              ? "Subiendo archivos..."
-              : "Seleccionar archivos"
-          }}
+          {{ uploading ? "Subiendo archivos..." : "Seleccionar archivos" }}
         </span>
       </button>
 
@@ -67,9 +76,7 @@
         <span>JPG</span>
         <span>JPEG</span>
 
-        <small>
-          Máximo 100 MB por archivo
-        </small>
+        <small> Máximo 100 MB por archivo </small>
       </div>
     </section>
 
@@ -90,16 +97,11 @@
     <section class="files-section">
       <header class="files-header">
         <div>
-          <span class="section-tag">
-            DOCUMENTOS DEL PROYECTO
-          </span>
+          <span class="section-tag"> DOCUMENTOS DEL PROYECTO </span>
 
           <h2>Archivos cargados</h2>
 
-          <p>
-            Revisa los documentos disponibles antes
-            de iniciar el análisis.
-          </p>
+          <p>Revisa los documentos disponibles antes de iniciar el análisis.</p>
         </div>
 
         <div class="documents-counter">
@@ -108,20 +110,21 @@
           </strong>
 
           <span>
-            {{
-              documents.length === 1
-                ? "archivo"
-                : "archivos"
-            }}
+            {{ documents.length === 1 ? "archivo" : "archivos" }}
           </span>
         </div>
       </header>
 
       <!-- LISTA -->
       <div v-if="documents.length" class="files-list">
-        <article v-for="doc in documents" :key="doc.document_id" class="file-row" :class="{
-          failed: doc.status === 'failed',
-        }">
+        <article
+          v-for="doc in documents"
+          :key="doc.document_id"
+          class="file-row"
+          :class="{
+            failed: doc.status === 'failed',
+          }"
+        >
           <div class="file-type-icon">
             <QuantiaIcon :name="fileIcon(doc.file_name)" :size="24" />
 
@@ -137,12 +140,7 @@
 
             <div class="file-meta">
               <span>
-                {{
-                  formatBytes(
-                    doc.metadata?.file_size ||
-                    doc.size_bytes
-                  )
-                }}
+                {{ formatBytes(doc.metadata?.file_size || doc.size_bytes) }}
               </span>
 
               <span class="meta-divider"></span>
@@ -153,14 +151,32 @@
             </div>
           </div>
 
-          <span class="status-badge" :class="statusClass(doc.status)">
-            <QuantiaIcon :name="doc.status === 'failed'
-                ? 'warning'
-                : 'file-check'
-              " :size="14" />
+          <div class="file-actions">
+            <span class="status-badge" :class="statusClass(doc.status)">
+              <QuantiaIcon
+                :name="doc.status === 'failed' ? 'warning' : 'file-check'"
+                :size="14"
+              />
 
-            {{ statusLabel(doc.status) }}
-          </span>
+              {{ statusLabel(doc.status) }}
+            </span>
+
+            <button
+              type="button"
+              class="delete-file-btn"
+              :disabled="uploading || deletingDocumentId === doc.document_id"
+              :title="`Eliminar ${doc.file_name}`"
+              @click="deleteDocument(doc)"
+            >
+              <QuantiaIcon name="trash" :size="16" />
+
+              <span>
+                {{
+                  deletingDocumentId === doc.document_id ? "Eliminando..." : "Eliminar"
+                }}
+              </span>
+            </button>
+          </div>
         </article>
       </div>
 
@@ -171,14 +187,9 @@
         </div>
 
         <div>
-          <strong>
-            Todavía no hay documentos
-          </strong>
+          <strong> Todavía no hay documentos </strong>
 
-          <p>
-            Agrega al menos un archivo para continuar
-            con el análisis del proyecto.
-          </p>
+          <p>Agrega al menos un archivo para continuar con el análisis del proyecto.</p>
         </div>
       </div>
     </section>
@@ -192,27 +203,31 @@
 
         <span>
           Anterior
-          <small>
-            Cómo se construirá
-          </small>
+          <small> Cómo se construirá </small>
         </span>
       </button>
 
       <div class="footer-actions">
-        <button type="button" class="workflow-btn secondary" :disabled="uploading" @click="loadDocuments">
+        <button
+          type="button"
+          class="workflow-btn secondary"
+          :disabled="uploading"
+          @click="loadDocuments"
+        >
           <QuantiaIcon name="reset" :size="17" />
 
           Actualizar lista
         </button>
 
-        <button type="button" class="workflow-btn primary" :disabled="uploading ||
-          !documents.length
-          " @click="goAnalysis">
+        <button
+          type="button"
+          class="workflow-btn primary"
+          :disabled="uploading || !documents.length"
+          @click="goAnalysis"
+        >
           <span>
             Analizar con IA
-            <small>
-              Planos y revisión
-            </small>
+            <small> Planos y revisión </small>
           </span>
 
           <QuantiaIcon name="arrow-right" :size="17" />
@@ -223,10 +238,7 @@
 </template>
 
 <script setup>
-import {
-  onMounted,
-  ref,
-} from "vue";
+import { onMounted, ref } from "vue";
 
 import { useRouter } from "vue-router";
 
@@ -237,6 +249,7 @@ import QuantiaWorkflowLayout from "../QuantiaWorkflowLayout.vue";
 import QuantiaIcon from "@/components/common/QuantiaIcon.vue";
 
 import {
+  eliminarDocumento,
   listarDocumentos,
   subirDocumento,
 } from "@/modules/vivienda/services/documentosApiService";
@@ -253,19 +266,15 @@ const documents = ref([]);
 
 const uploading = ref(false);
 
+const deletingDocumentId = ref("");
+
 const dragActive = ref(false);
 
 const error = ref("");
 
-const MAX_FILE_SIZE =
-  100 * 1024 * 1024;
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
-const allowedExtensions = [
-  "pdf",
-  "png",
-  "jpg",
-  "jpeg",
-];
+const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
 
 /* =========================================================
    VALIDACIÓN
@@ -277,27 +286,19 @@ function validateFiles(files) {
   error.value = "";
 
   for (const file of files) {
-    const ext = String(
-      file.name || ""
-    )
+    const ext = String(file.name || "")
       .split(".")
       .pop()
       ?.toLowerCase();
 
-    if (
-      !allowedExtensions.includes(ext)
-    ) {
-      error.value =
-        `Formato no permitido: ${file.name}`;
+    if (!allowedExtensions.includes(ext)) {
+      error.value = `Formato no permitido: ${file.name}`;
 
       continue;
     }
 
-    if (
-      file.size > MAX_FILE_SIZE
-    ) {
-      error.value =
-        `${file.name} supera el límite de 100 MB.`;
+    if (file.size > MAX_FILE_SIZE) {
+      error.value = `${file.name} supera el límite de 100 MB.`;
 
       continue;
     }
@@ -313,8 +314,7 @@ function validateFiles(files) {
    ========================================================= */
 
 async function upload(files) {
-  const validFiles =
-    validateFiles(files);
+  const validFiles = validateFiles(files);
 
   if (!validFiles.length) {
     return;
@@ -328,14 +328,10 @@ async function upload(files) {
     try {
       await subirDocumento({
         file,
-        accessToken:
-          auth.accessToken || "",
+        accessToken: auth.accessToken || "",
       });
     } catch (e) {
-      uploadErrors.push(
-        e?.message ||
-        `No fue posible subir ${file.name}.`
-      );
+      uploadErrors.push(e?.message || `No fue posible subir ${file.name}.`);
     }
   }
 
@@ -344,15 +340,12 @@ async function upload(files) {
   await loadDocuments();
 
   if (uploadErrors.length) {
-    error.value =
-      uploadErrors.join(" ");
+    error.value = uploadErrors.join(" ");
   }
 }
 
 async function pickFiles(event) {
-  await upload(
-    [...event.target.files]
-  );
+  await upload([...event.target.files]);
 
   event.target.value = "";
 }
@@ -360,23 +353,15 @@ async function pickFiles(event) {
 async function dropFiles(event) {
   dragActive.value = false;
 
-  await upload(
-    [...event.dataTransfer.files]
-  );
+  await upload([...event.dataTransfer.files]);
 }
 
 function handleDragLeave(event) {
-  const current =
-    event.currentTarget;
+  const current = event.currentTarget;
 
-  const related =
-    event.relatedTarget;
+  const related = event.relatedTarget;
 
-  if (
-    current &&
-    related &&
-    current.contains(related)
-  ) {
+  if (current && related && current.contains(related)) {
     return;
   }
 
@@ -391,22 +376,61 @@ async function loadDocuments() {
   try {
     error.value = "";
 
-    const response =
-      await listarDocumentos({
-        accessToken:
-          auth.accessToken || "",
-      });
+    const response = await listarDocumentos({
+      accessToken: auth.accessToken || "",
+    });
 
-    documents.value =
-      Array.isArray(
-        response?.documents
-      )
-        ? response.documents
-        : [];
+    documents.value = Array.isArray(response?.documents) ? response.documents : [];
   } catch (e) {
-    error.value =
-      e?.message ||
-      "No fue posible consultar los documentos.";
+    error.value = e?.message || "No fue posible consultar los documentos.";
+  }
+}
+
+async function deleteDocument(doc) {
+  const documentId = String(doc?.document_id || "").trim();
+
+  if (!documentId) {
+    error.value = "No fue posible identificar el documento.";
+
+    return;
+  }
+
+  const fileName = String(doc?.file_name || "este archivo");
+
+  const confirmed = window.confirm(
+    `¿Eliminar "${fileName}"?\n\nEsta acción eliminará el archivo cargado y sus datos asociados.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    error.value = "";
+
+    deletingDocumentId.value = documentId;
+
+    await eliminarDocumento({
+      documentId,
+      accessToken: auth.accessToken || "",
+    });
+
+    /*
+     * Eliminación inmediata de la vista.
+     * Evita que el usuario siga viendo
+     * un documento que ya fue eliminado.
+     */
+    documents.value = documents.value.filter((item) => item.document_id !== documentId);
+
+    /*
+     * Volvemos a consultar backend para
+     * confirmar el estado real.
+     */
+    await loadDocuments();
+  } catch (e) {
+    error.value = e?.message || `No fue posible eliminar ${fileName}.`;
+  } finally {
+    deletingDocumentId.value = "";
   }
 }
 
@@ -419,20 +443,14 @@ function extension(name) {
     String(name || "")
       .split(".")
       .pop()
-      ?.toUpperCase() ||
-    "DOC"
+      ?.toUpperCase() || "DOC"
   );
 }
 
 function fileIcon(name) {
-  const ext = extension(name)
-    .toLowerCase();
+  const ext = extension(name).toLowerCase();
 
-  if (
-    ["png", "jpg", "jpeg"].includes(
-      ext
-    )
-  ) {
+  if (["png", "jpg", "jpeg"].includes(ext)) {
     return "image";
   }
 
@@ -444,19 +462,14 @@ function fileIcon(name) {
 }
 
 function formatBytes(value) {
-  const size =
-    Number(value || 0);
+  const size = Number(value || 0);
 
   if (size > 1048576) {
-    return `${(
-      size / 1048576
-    ).toFixed(1)} MB`;
+    return `${(size / 1048576).toFixed(1)} MB`;
   }
 
   if (size > 1024) {
-    return `${(
-      size / 1024
-    ).toFixed(0)} KB`;
+    return `${(size / 1024).toFixed(0)} KB`;
   }
 
   if (size) {
@@ -472,10 +485,7 @@ function statusLabel(value) {
     failed: "Error",
   };
 
-  return (
-    labels[value] ||
-    "Subido"
-  );
+  return labels[value] || "Subido";
 }
 
 function statusClass(value) {
@@ -491,15 +501,11 @@ function statusClass(value) {
    ========================================================= */
 
 function goBack() {
-  router.push(
-    "/vivienda/workflow/como-se-construira"
-  );
+  router.push("/vivienda/workflow/como-se-construira");
 }
 
 function goAnalysis() {
-  router.push(
-    "/vivienda/workflow/planos-revision/analisis"
-  );
+  router.push("/vivienda/workflow/planos-revision/analisis");
 }
 
 onMounted(loadDocuments);
@@ -533,10 +539,7 @@ onMounted(loadDocuments);
   flex-shrink: 0;
   border: 1px solid #d2deef;
   border-radius: 10px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -581,26 +584,16 @@ onMounted(loadDocuments);
   padding: 30px;
   border: 1.5px dashed #aebed5;
   border-radius: 12px;
-  background:
-    radial-gradient(circle at 50% 20%,
-      rgba(7, 95, 242, 0.055),
-      transparent 35%),
+  background: radial-gradient(circle at 50% 20%, rgba(7, 95, 242, 0.055), transparent 35%),
     #ffffff;
   text-align: center;
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
 .upload-zone.dragging {
   border-color: #075ff2;
-  background:
-    linear-gradient(135deg,
-      #f3f7ff,
-      #f8f5ff);
-  box-shadow:
-    0 0 0 3px rgba(7, 95, 242, 0.08);
+  background: linear-gradient(135deg, #f3f7ff, #f8f5ff);
+  box-shadow: 0 0 0 3px rgba(7, 95, 242, 0.08);
 }
 
 .upload-zone.uploading {
@@ -614,10 +607,7 @@ onMounted(loadDocuments);
   place-items: center;
   border: 1px solid #d2deef;
   border-radius: 16px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -651,25 +641,18 @@ onMounted(loadDocuments);
   padding: 0 22px;
   border: 0;
   border-radius: 9px;
-  background:
-    linear-gradient(90deg,
-      #075ff2,
-      #8421f1);
+  background: linear-gradient(90deg, #075ff2, #8421f1);
   color: #ffffff;
   font-size: 0.84rem;
   font-weight: 750;
   cursor: pointer;
-  box-shadow:
-    0 7px 17px rgba(51, 69, 211, 0.2);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+  box-shadow: 0 7px 17px rgba(51, 69, 211, 0.2);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .select-files-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow:
-    0 10px 22px rgba(51, 69, 211, 0.25);
+  box-shadow: 0 10px 22px rgba(51, 69, 211, 0.25);
 }
 
 .select-files-btn:disabled {
@@ -689,7 +672,7 @@ onMounted(loadDocuments);
   gap: 7px;
 }
 
-.upload-rules>span {
+.upload-rules > span {
   min-height: 25px;
   display: inline-flex;
   align-items: center;
@@ -745,8 +728,7 @@ onMounted(loadDocuments);
   border: 1px solid #bcc9dc;
   border-radius: 11px;
   background: #ffffff;
-  box-shadow:
-    0 3px 10px rgba(32, 55, 105, 0.03);
+  box-shadow: 0 3px 10px rgba(32, 55, 105, 0.03);
 }
 
 .files-header {
@@ -805,23 +787,19 @@ onMounted(loadDocuments);
 
 .file-row {
   display: grid;
-  grid-template-columns:
-    58px minmax(0, 1fr) auto;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
   gap: 14px;
   align-items: center;
   padding: 13px 15px;
   border: 1px solid #c5d0e1;
   border-radius: 9px;
   background: #ffffff;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .file-row:hover {
   border-color: #9db4dd;
-  box-shadow:
-    0 5px 14px rgba(44, 69, 126, 0.05);
+  box-shadow: 0 5px 14px rgba(44, 69, 126, 0.05);
 }
 
 .file-row.failed {
@@ -836,14 +814,11 @@ onMounted(loadDocuments);
   place-items: center;
   border: 1px solid #d2deef;
   border-radius: 11px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
-.file-type-icon>span {
+.file-type-icon > span {
   position: absolute;
   right: -5px;
   bottom: -5px;
@@ -864,7 +839,7 @@ onMounted(loadDocuments);
   min-width: 0;
 }
 
-.file-copy>strong {
+.file-copy > strong {
   display: block;
   overflow: hidden;
   color: #162d70;
@@ -903,7 +878,42 @@ onMounted(loadDocuments);
   font-size: 0.65rem;
   font-weight: 750;
 }
+.file-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
 
+.delete-file-btn {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid #e3bcbc;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #b92727;
+  font-size: 0.65rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.delete-file-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: #c82727;
+  background: #fff4f4;
+  color: #c82727;
+}
+
+.delete-file-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 .status-badge.success {
   border: 1px solid #c9dfd2;
   background: #f2faf5;
@@ -939,10 +949,7 @@ onMounted(loadDocuments);
   place-items: center;
   flex-shrink: 0;
   border-radius: 11px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -979,10 +986,7 @@ onMounted(loadDocuments);
   font-size: 0.82rem;
   font-weight: 750;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .workflow-btn:hover:not(:disabled) {
@@ -1003,16 +1007,12 @@ onMounted(loadDocuments);
 .workflow-btn.primary {
   min-width: 210px;
   border: 0;
-  background:
-    linear-gradient(90deg,
-      #075ff2,
-      #8421f1);
+  background: linear-gradient(90deg, #075ff2, #8421f1);
   color: #ffffff;
-  box-shadow:
-    0 7px 17px rgba(51, 69, 211, 0.2);
+  box-shadow: 0 7px 17px rgba(51, 69, 211, 0.2);
 }
 
-.workflow-btn>span {
+.workflow-btn > span {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1042,7 +1042,10 @@ onMounted(loadDocuments);
     min-height: 240px;
     padding: 24px 18px;
   }
-
+  .file-actions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
   .files-section {
     padding: 18px;
   }
@@ -1052,8 +1055,7 @@ onMounted(loadDocuments);
   }
 
   .file-row {
-    grid-template-columns:
-      52px minmax(0, 1fr);
+    grid-template-columns: 52px minmax(0, 1fr);
   }
 
   .status-badge {
@@ -1079,7 +1081,10 @@ onMounted(loadDocuments);
   .info-note {
     padding: 12px;
   }
-
+  .file-actions {
+    grid-column: auto;
+    flex-wrap: wrap;
+  }
   .upload-rules small {
     width: 100%;
     margin: 3px 0 0;

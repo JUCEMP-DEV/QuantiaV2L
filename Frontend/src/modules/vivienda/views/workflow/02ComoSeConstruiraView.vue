@@ -1,6 +1,9 @@
 <template>
-  <QuantiaWorkflowLayout :step="2" title="2. Cómo se construirá"
-    subtitle="Define las condiciones del terreno, sistema constructivo, cimentación, losa e instalaciones. Al final podrás elegir si continuarás desde un plano o dibujando la vivienda.">
+  <QuantiaWorkflowLayout
+    :step="2"
+    title="2. Cómo se construirá"
+    subtitle="Define las condiciones del terreno, sistema constructivo, cimentación, losa e instalaciones. Al final podrás elegir si continuarás desde un plano o dibujando la vivienda."
+  >
     <div class="content-grid">
       <!-- =================================================
              FORMULARIO
@@ -16,34 +19,102 @@
             </div>
 
             <div>
-              <span class="section-number">
-                01
-              </span>
+              <span class="section-number"> 01 </span>
 
               <h2>Condiciones del proyecto</h2>
 
               <p>
-                Define las características actuales del terreno
-                y las condiciones de acceso al sitio.
+                Define las características actuales del terreno y las condiciones de
+                acceso al sitio.
               </p>
             </div>
           </header>
 
           <div class="condition-grid">
+            <fieldset class="setting-block site-dimensions-block">
+              <legend>Dimensiones del terreno</legend>
+
+              <div class="site-dimensions-grid">
+                <label class="field">
+                  Ancho / frente
+
+                  <div class="input-with-unit">
+                    <input
+                      v-model="form.anchoTerrenoM"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      placeholder="Ej. 8.00"
+                      @input="markPending"
+                    />
+
+                    <span>m</span>
+                  </div>
+                </label>
+
+                <label class="field">
+                  Largo / fondo
+
+                  <div class="input-with-unit">
+                    <input
+                      v-model="form.largoTerrenoM"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      placeholder="Ej. 20.00"
+                      @input="markPending"
+                    />
+
+                    <span>m</span>
+                  </div>
+                </label>
+
+                <label class="field">
+                  Superficie del terreno
+
+                  <div class="input-with-unit">
+                    <input
+                      v-model="form.areaTerrenoM2"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      placeholder="Ej. 160.00"
+                      @input="markPending"
+                    />
+
+                    <span>m²</span>
+                  </div>
+                </label>
+              </div>
+
+              <p class="site-dimensions-note">
+                Captura los datos que conozcas del terreno. La superficie se conserva como
+                dato declarado y no se calcula automáticamente a partir del ancho y largo.
+              </p>
+            </fieldset>
+
             <!-- TOPOGRAFÍA -->
             <fieldset class="setting-block">
               <legend>Topografía del terreno</legend>
 
               <div class="option-grid three">
-                <button v-for="item in topographyOptions" :key="item.value" type="button" class="choice-card compact"
+                <button
+                  v-for="item in topographyOptions"
+                  :key="item.value"
+                  type="button"
+                  class="choice-card compact"
                   :class="{
-                    selected:
-                      form.topografia === item.value,
-                  }" @click="selectTopography(item.value)">
+                    selected: form.topografia === item.value,
+                  }"
+                  @click="selectTopography(item.value)"
+                >
                   <span class="selection-mark">
-                    <QuantiaIcon v-if="
-                      form.topografia === item.value
-                    " name="check" :size="11" :stroke-width="2.6" />
+                    <QuantiaIcon
+                      v-if="form.topografia === item.value"
+                      name="check"
+                      :size="11"
+                      :stroke-width="2.6"
+                    />
                   </span>
 
                   <span class="choice-icon">
@@ -54,16 +125,24 @@
                 </button>
               </div>
 
-              <div v-if="
-                form.topografia === 'con_pendiente'
-              " class="configuration-detail">
+              <div
+                v-if="form.topografia === 'con_pendiente'"
+                class="configuration-detail"
+              >
                 <label for="pendienteProfundidadM">
                   Profundidad o desnivel de referencia
                 </label>
 
                 <div class="input-with-unit">
-                  <input id="pendienteProfundidadM" v-model="form.pendienteProfundidadM
-                    " type="number" min="0.01" step="0.01" placeholder="Ej. 0.30" @input="markPending" />
+                  <input
+                    id="pendienteProfundidadM"
+                    v-model="form.pendienteProfundidadM"
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Ej. 0.30"
+                    @input="markPending"
+                  />
 
                   <span>m</span>
                 </div>
@@ -72,26 +151,29 @@
 
             <!-- CONDICIÓN DEL TERRENO -->
             <fieldset class="setting-block">
-              <legend>
-                Condición actual del terreno
-              </legend>
+              <legend>Condición actual del terreno</legend>
 
               <div class="option-grid terrain">
-                <button v-for="item in terrainOptions" :key="item.value" type="button"
-                  class="choice-card compact terrain-option" :class="{
-                    selected:
-                      form.condicionTerreno ===
-                      item.value,
-                  }" @click="
-                    form.condicionTerreno =
-                    item.value;
-                  markPending();
-                  ">
+                <button
+                  v-for="item in terrainOptions"
+                  :key="item.value"
+                  type="button"
+                  class="choice-card compact terrain-option"
+                  :class="{
+                    selected: form.condicionTerreno === item.value,
+                  }"
+                  @click="
+                    form.condicionTerreno = item.value;
+                    markPending();
+                  "
+                >
                   <span class="selection-mark">
-                    <QuantiaIcon v-if="
-                      form.condicionTerreno ===
-                      item.value
-                    " name="check" :size="11" :stroke-width="2.6" />
+                    <QuantiaIcon
+                      v-if="form.condicionTerreno === item.value"
+                      name="check"
+                      :size="11"
+                      :stroke-width="2.6"
+                    />
                   </span>
 
                   <span class="choice-icon">
@@ -112,17 +194,14 @@
                   </div>
 
                   <div>
-                    <span class="subsection-tag">
-                      CONSTRUCCIÓN EXISTENTE
-                    </span>
+                    <span class="subsection-tag"> CONSTRUCCIÓN EXISTENTE </span>
 
                     <h3>Demolición</h3>
                   </div>
                 </div>
 
                 <p>
-                  Captura los datos generales de la
-                  construcción que deberá retirarse.
+                  Captura los datos generales de la construcción que deberá retirarse.
                 </p>
               </header>
 
@@ -130,36 +209,25 @@
                 <label class="field">
                   Tipo de demolición
 
-                  <select v-model="form.demolicion
-                    .tipoDemolicion
-                    " @change="markPending">
-                    <option value="">
-                      Selecciona
-                    </option>
+                  <select v-model="form.demolicion.tipoDemolicion" @change="markPending">
+                    <option value="">Selecciona</option>
 
-                    <option value="manual">
-                      Manual
-                    </option>
+                    <option value="manual">Manual</option>
 
-                    <option value="mecanica">
-                      Mecánica
-                    </option>
+                    <option value="mecanica">Mecánica</option>
                   </select>
                 </label>
 
                 <label class="field">
                   Estructura existente
 
-                  <select v-model="form.demolicion
-                    .tipoEstructuraExistente
-                    " @change="markPending">
-                    <option value="">
-                      Selecciona
-                    </option>
+                  <select
+                    v-model="form.demolicion.tipoEstructuraExistente"
+                    @change="markPending"
+                  >
+                    <option value="">Selecciona</option>
 
-                    <option value="precaria">
-                      Precaria / mampostería
-                    </option>
+                    <option value="precaria">Precaria / mampostería</option>
 
                     <option value="construccion_previa">
                       Concreto y muros existentes
@@ -170,18 +238,25 @@
                 <label class="field">
                   Niveles existentes
 
-                  <input v-model="form.demolicion
-                    .nivelesExistentes
-                    " type="number" min="1" @input="markPending" />
+                  <input
+                    v-model="form.demolicion.nivelesExistentes"
+                    type="number"
+                    min="1"
+                    @input="markPending"
+                  />
                 </label>
 
                 <label class="field">
                   Ancho
 
                   <div class="input-with-unit">
-                    <input v-model="form.demolicion
-                      .anchoDemolicionM
-                      " type="number" min="0" step="0.01" @input="markPending" />
+                    <input
+                      v-model="form.demolicion.anchoDemolicionM"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      @input="markPending"
+                    />
 
                     <span>m</span>
                   </div>
@@ -191,9 +266,13 @@
                   Largo
 
                   <div class="input-with-unit">
-                    <input v-model="form.demolicion
-                      .largoDemolicionM
-                      " type="number" min="0" step="0.01" @input="markPending" />
+                    <input
+                      v-model="form.demolicion.largoDemolicionM"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      @input="markPending"
+                    />
 
                     <span>m</span>
                   </div>
@@ -203,11 +282,7 @@
                   Área estimada
 
                   <div class="calculated-field">
-                    {{
-                      areaDemolicionCalculada.toFixed(
-                        2
-                      )
-                    }}
+                    {{ areaDemolicionCalculada.toFixed(2) }}
                     m²
                   </div>
                 </label>
@@ -219,18 +294,26 @@
               <legend>Acceso al sitio</legend>
 
               <div class="option-grid two">
-                <button v-for="item in accessOptions" :key="item.value" type="button" class="choice-card compact"
+                <button
+                  v-for="item in accessOptions"
+                  :key="item.value"
+                  type="button"
+                  class="choice-card compact"
                   :class="{
-                    selected:
-                      form.tipoAcceso === item.value,
-                  }" @click="
+                    selected: form.tipoAcceso === item.value,
+                  }"
+                  @click="
                     form.tipoAcceso = item.value;
-                  markPending();
-                  ">
+                    markPending();
+                  "
+                >
                   <span class="selection-mark">
-                    <QuantiaIcon v-if="
-                      form.tipoAcceso === item.value
-                    " name="check" :size="11" :stroke-width="2.6" />
+                    <QuantiaIcon
+                      v-if="form.tipoAcceso === item.value"
+                      name="check"
+                      :size="11"
+                      :stroke-width="2.6"
+                    />
                   </span>
 
                   <span class="choice-icon">
@@ -254,31 +337,34 @@
             </div>
 
             <div>
-              <span class="section-number">
-                02
-              </span>
+              <span class="section-number"> 02 </span>
 
               <h2>Sistema constructivo</h2>
 
               <p>
-                Selecciona el sistema estructural principal
-                previsto para la vivienda.
+                Selecciona el sistema estructural principal previsto para la vivienda.
               </p>
             </div>
           </header>
 
           <div class="option-grid three wide">
-            <button v-for="item in structuralOptions" :key="item.value" type="button" class="choice-card descriptive"
+            <button
+              v-for="item in structuralOptions"
+              :key="item.value"
+              type="button"
+              class="choice-card descriptive"
               :class="{
-                selected:
-                  form.sistemaEstructural ===
-                  item.value,
-              }" @click="selectStructural(item.value)">
+                selected: form.sistemaEstructural === item.value,
+              }"
+              @click="selectStructural(item.value)"
+            >
               <span class="selection-mark">
-                <QuantiaIcon v-if="
-                  form.sistemaEstructural ===
-                  item.value
-                " name="check" :size="11" :stroke-width="2.6" />
+                <QuantiaIcon
+                  v-if="form.sistemaEstructural === item.value"
+                  name="check"
+                  :size="11"
+                  :stroke-width="2.6"
+                />
               </span>
 
               <span class="technical-icon">
@@ -304,34 +390,35 @@
             </div>
 
             <div>
-              <span class="section-number">
-                03
-              </span>
+              <span class="section-number"> 03 </span>
 
               <h2>Cimentación</h2>
 
-              <p>
-                Define el tipo de cimentación considerado
-                para el proyecto.
-              </p>
+              <p>Define el tipo de cimentación considerado para el proyecto.</p>
             </div>
           </header>
 
           <div class="option-grid four wide">
-            <button v-for="item in foundationOptions" :key="item.value" type="button"
-              class="choice-card foundation-card" :class="{
-                selected:
-                  form.tipoCimentacion ===
-                  item.value,
-              }" @click="
+            <button
+              v-for="item in foundationOptions"
+              :key="item.value"
+              type="button"
+              class="choice-card foundation-card"
+              :class="{
+                selected: form.tipoCimentacion === item.value,
+              }"
+              @click="
                 form.tipoCimentacion = item.value;
-              markPending();
-              ">
+                markPending();
+              "
+            >
               <span class="selection-mark">
-                <QuantiaIcon v-if="
-                  form.tipoCimentacion ===
-                  item.value
-                " name="check" :size="11" :stroke-width="2.6" />
+                <QuantiaIcon
+                  v-if="form.tipoCimentacion === item.value"
+                  name="check"
+                  :size="11"
+                  :stroke-width="2.6"
+                />
               </span>
 
               <span class="technical-icon">
@@ -353,31 +440,35 @@
             </div>
 
             <div>
-              <span class="section-number">
-                04
-              </span>
+              <span class="section-number"> 04 </span>
 
               <h2>Tipo de losa</h2>
 
-              <p>
-                Selecciona el sistema de losa previsto
-                para la vivienda.
-              </p>
+              <p>Selecciona el sistema de losa previsto para la vivienda.</p>
             </div>
           </header>
 
           <div class="option-grid three wide">
-            <button v-for="item in slabOptions" :key="item.value" type="button" class="choice-card slab-card" :class="{
-              selected:
-                form.tipoLosa === item.value,
-            }" @click="
-              form.tipoLosa = item.value;
-            markPending();
-            ">
+            <button
+              v-for="item in slabOptions"
+              :key="item.value"
+              type="button"
+              class="choice-card slab-card"
+              :class="{
+                selected: form.tipoLosa === item.value,
+              }"
+              @click="
+                form.tipoLosa = item.value;
+                markPending();
+              "
+            >
               <span class="selection-mark">
-                <QuantiaIcon v-if="
-                  form.tipoLosa === item.value
-                " name="check" :size="11" :stroke-width="2.6" />
+                <QuantiaIcon
+                  v-if="form.tipoLosa === item.value"
+                  name="check"
+                  :size="11"
+                  :stroke-width="2.6"
+                />
               </span>
 
               <span class="technical-icon">
@@ -399,52 +490,43 @@
             </div>
 
             <div>
-              <span class="section-number">
-                05
-              </span>
+              <span class="section-number"> 05 </span>
 
               <h2>Instalaciones</h2>
 
               <p>
-                Indica qué sistemas tendrá la vivienda.
-                Cada opción puede definirse como Sí,
-                No o Por definir.
+                Indica qué sistemas tendrá la vivienda. Cada opción puede definirse como
+                Sí, No o Por definir.
               </p>
             </div>
           </header>
 
           <div class="installation-grid">
-            <button v-for="item in installationOptions" :key="item.value" type="button" class="installation-card"
+            <button
+              v-for="item in installationOptions"
+              :key="item.value"
+              type="button"
+              class="installation-card"
               :class="{
-                yes:
-                  form.instalaciones[
-                  item.value
-                  ] === true,
+                yes: form.instalaciones[item.value] === true,
 
-                no:
-                  form.instalaciones[
-                  item.value
-                  ] === false,
-              }" @click="
-                toggleInstallation(item.value)
-                ">
+                no: form.instalaciones[item.value] === false,
+              }"
+              @click="toggleInstallation(item.value)"
+            >
               <span class="installation-icon">
                 <QuantiaIcon :name="item.icon" :size="25" />
               </span>
 
               <strong>{{ item.label }}</strong>
 
-              <span class="installation-status" :class="{
-                defined:
-                  form.instalaciones[
-                  item.value
-                  ] !== null,
-              }">
-                {{
-                  installationStatus(
-                    form.instalaciones[item.value]
-                  )
-                }}
+              <span
+                class="installation-status"
+                :class="{
+                  defined: form.instalaciones[item.value] !== null,
+                }"
+              >
+                {{ installationStatus(form.instalaciones[item.value]) }}
               </span>
             </button>
           </div>
@@ -454,9 +536,7 @@
 
             <span>
               Selecciona cada tarjeta para cambiar entre
-              <strong>Sí</strong>,
-              <strong>No</strong> y
-              <strong>Por definir</strong>.
+              <strong>Sí</strong>, <strong>No</strong> y <strong>Por definir</strong>.
             </span>
           </div>
         </section>
@@ -471,38 +551,37 @@
             </div>
 
             <div>
-              <span class="section-number">
-                06
-              </span>
+              <span class="section-number"> 06 </span>
 
               <h2>Diseño de la vivienda</h2>
 
               <p>
-                Elige cómo quieres proporcionar la
-                información espacial de la vivienda.
+                Elige cómo quieres proporcionar la información espacial de la vivienda.
               </p>
             </div>
           </header>
 
           <div class="design-options">
-            <button v-for="item in designOptions" :key="item.value" type="button" class="design-card" :class="{
-              selected:
-                form.modoDiseno === item.value,
-            }" @click="
-              form.modoDiseno = item.value;
-            markPending();
-            ">
+            <button
+              v-for="item in designOptions"
+              :key="item.value"
+              type="button"
+              class="design-card"
+              :class="{
+                selected: form.modoDiseno === item.value,
+              }"
+              @click="
+                form.modoDiseno = item.value;
+                markPending();
+              "
+            >
               <div class="design-icon">
                 <QuantiaIcon :name="item.icon" :size="31" />
               </div>
 
               <div class="design-copy">
                 <span class="option-label">
-                  {{
-                    item.value === "subir_plano"
-                      ? "OPCIÓN 1"
-                      : "OPCIÓN 2"
-                  }}
+                  {{ item.value === "subir_plano" ? "OPCIÓN 1" : "OPCIÓN 2" }}
                 </span>
 
                 <strong>{{ item.label }}</strong>
@@ -566,9 +645,7 @@
       <aside class="summary-panel">
         <header class="summary-heading">
           <div>
-            <span class="section-tag">
-              RESUMEN
-            </span>
+            <span class="section-tag"> RESUMEN </span>
 
             <h2>Configuración del proyecto</h2>
           </div>
@@ -588,6 +665,18 @@
           <div class="summary-item">
             <dt>Condición del terreno</dt>
             <dd>{{ terrainLabel }}</dd>
+          </div>
+
+          <div class="summary-item">
+            <dt>Dimensiones del terreno</dt>
+
+            <dd>
+              {{ siteDimensionsLabel }}
+
+              <small v-if="siteAreaLabel">
+                {{ siteAreaLabel }}
+              </small>
+            </dd>
           </div>
 
           <div class="summary-item">
@@ -620,10 +709,7 @@
           <div class="summary-item">
             <dt>Instalaciones</dt>
 
-            <dd>
-              {{ definedInstallations }} de 5
-              definidas
-            </dd>
+            <dd>{{ definedInstallations }} de 5 definidas</dd>
           </div>
 
           <div class="summary-item">
@@ -644,24 +730,15 @@
               {{ nextStepLabel }}
             </strong>
 
-            <p v-if="
-              form.modoDiseno === 'subir_plano'
-            ">
-              Cargarás el plano para iniciar su
-              revisión y análisis.
+            <p v-if="form.modoDiseno === 'subir_plano'">
+              Cargarás el plano para iniciar su revisión y análisis.
             </p>
 
-            <p v-else-if="
-              form.modoDiseno === 'dibujar'
-            ">
-              Continuarás directamente a la captura
-              y definición espacial de la vivienda.
+            <p v-else-if="form.modoDiseno === 'dibujar'">
+              Continuarás directamente a la captura y definición espacial de la vivienda.
             </p>
 
-            <p v-else>
-              Selecciona cómo quieres continuar con
-              el diseño de la vivienda.
-            </p>
+            <p v-else>Selecciona cómo quieres continuar con el diseño de la vivienda.</p>
           </div>
         </div>
       </aside>
@@ -669,13 +746,8 @@
   </QuantiaWorkflowLayout>
 </template>
 
-
 <script setup>
-import {
-  computed,
-  reactive,
-  ref,
-} from "vue";
+import { computed, reactive, ref } from "vue";
 
 import { useRouter } from "vue-router";
 
@@ -687,108 +759,72 @@ import { useViviendaStore } from "@/modules/vivienda/store/viviendaStore";
 const router = useRouter();
 const viviendaStore = useViviendaStore();
 
-const storedPreliminares =
-  viviendaStore.preliminares || {};
+const storedPreliminares = viviendaStore.preliminares || {};
 
-const storedGeneral =
-  viviendaStore.datosGeneralesObra || {};
+const storedGeneral = viviendaStore.datosGeneralesObra || {};
 
 const storedInstallations =
-  viviendaStore.modulos?.instalaciones
-    ?.controles?.serviciosInstalaciones || {};
+  viviendaStore.modulos?.instalaciones?.controles?.serviciosInstalaciones || {};
 
 const form = reactive({
-  topografia:
-    storedPreliminares.topografia || "",
+  anchoTerrenoM: storedGeneral.anchoTerrenoM ?? "",
 
-  pendienteProfundidadM:
-    storedPreliminares.pendienteProfundidadM ||
-    "",
+  largoTerrenoM: storedGeneral.largoTerrenoM ?? "",
 
-  tipoAcceso:
-    storedPreliminares.tipoAcceso || "",
+  areaTerrenoM2: storedGeneral.areaTerrenoM2 ?? "",
 
-  condicionTerreno:
-    storedPreliminares.condicionTerreno || "",
+  topografia: storedPreliminares.topografia || "",
 
-  sistemaEstructural:
-    storedGeneral.sistemaEstructural || "",
+  pendienteProfundidadM: storedPreliminares.pendienteProfundidadM || "",
 
-  tipoCimentacion:
-    storedGeneral.tipoCimentacion || "",
+  tipoAcceso: storedPreliminares.tipoAcceso || "",
 
-  tipoLosa:
-    storedGeneral.tipoLosa ||
-    storedGeneral.engineInputs?.tipo_losa ||
-    "",
+  condicionTerreno: storedPreliminares.condicionTerreno || "",
 
-  modoDiseno:
-    storedGeneral.engineInputs?.modo_diseno ||
-    "",
+  sistemaEstructural: storedGeneral.sistemaEstructural || "",
+
+  tipoCimentacion: storedGeneral.tipoCimentacion || "",
+
+  tipoLosa: storedGeneral.tipoLosa || storedGeneral.engineInputs?.tipo_losa || "",
+
+  modoDiseno: storedGeneral.engineInputs?.modo_diseno || "",
 
   demolicion: {
-    tipoDemolicion:
-      storedPreliminares.demolicion
-        ?.tipoDemolicion || "",
+    tipoDemolicion: storedPreliminares.demolicion?.tipoDemolicion || "",
 
-    tipoEstructuraExistente:
-      storedPreliminares.demolicion
-        ?.tipoEstructuraExistente || "",
+    tipoEstructuraExistente: storedPreliminares.demolicion?.tipoEstructuraExistente || "",
 
-    nivelesExistentes:
-      storedPreliminares.demolicion
-        ?.nivelesExistentes || "",
+    nivelesExistentes: storedPreliminares.demolicion?.nivelesExistentes || "",
 
-    anchoDemolicionM:
-      storedPreliminares.demolicion
-        ?.anchoDemolicionM || "",
+    anchoDemolicionM: storedPreliminares.demolicion?.anchoDemolicionM || "",
 
-    largoDemolicionM:
-      storedPreliminares.demolicion
-        ?.largoDemolicionM || "",
+    largoDemolicionM: storedPreliminares.demolicion?.largoDemolicionM || "",
   },
 
   instalaciones: {
-    agua:
-      storedInstallations.agua ??
-      storedPreliminares.servicios?.agua ??
-      null,
+    agua: storedInstallations.agua ?? storedPreliminares.servicios?.agua ?? null,
 
-    drenaje:
-      storedInstallations.drenaje ??
-      storedPreliminares.servicios?.drenaje ??
-      null,
+    drenaje: storedInstallations.drenaje ?? storedPreliminares.servicios?.drenaje ?? null,
 
-    energia:
-      storedInstallations.energia ??
-      storedPreliminares.servicios?.energia ??
-      null,
+    energia: storedInstallations.energia ?? storedPreliminares.servicios?.energia ?? null,
 
     gas:
       storedInstallations.gas ??
-      storedPreliminares
-        .configuracionInicial?.instalaciones
-        ?.gas ??
+      storedPreliminares.configuracionInicial?.instalaciones?.gas ??
       null,
 
     telecomunicaciones:
       storedInstallations.telecomunicaciones ??
-      storedPreliminares
-        .configuracionInicial?.instalaciones
-        ?.telecomunicaciones ??
+      storedPreliminares.configuracionInicial?.instalaciones?.telecomunicaciones ??
       null,
   },
 });
 
 const error = ref("");
 
-const saveStatus = ref(
-  "Configuración cargada"
-);
+const saveStatus = ref("Configuración cargada");
 
-const saveDetail = ref(
-  "Sin cambios pendientes"
-);
+const saveDetail = ref("Sin cambios pendientes");
 
 /* =========================================================
    OPCIONES
@@ -857,22 +893,19 @@ const structuralOptions = [
   {
     value: "tradicional",
     label: "Mampostería",
-    description:
-      "Muros de carga como sistema principal.",
+    description: "Muros de carga como sistema principal.",
     icon: "masonry",
   },
   {
     value: "concreto_reforzado",
     label: "Concreto armado",
-    description:
-      "Elementos estructurales principales de concreto.",
+    description: "Elementos estructurales principales de concreto.",
     icon: "reinforced-concrete",
   },
   {
     value: "mixta",
     label: "Mixto",
-    description:
-      "Combinación de mampostería y concreto armado.",
+    description: "Combinación de mampostería y concreto armado.",
     icon: "mixed-structure",
   },
 ];
@@ -966,6 +999,35 @@ const designOptions = [
 /* =========================================================
    COMPUTED
    ========================================================= */
+const siteDimensionsLabel = computed(() => {
+  const ancho = Number(form.anchoTerrenoM || 0);
+
+  const largo = Number(form.largoTerrenoM || 0);
+
+  if (ancho > 0 && largo > 0) {
+    return `${ancho.toFixed(2)} × ${largo.toFixed(2)} m`;
+  }
+
+  if (ancho > 0) {
+    return `Ancho ${ancho.toFixed(2)} m`;
+  }
+
+  if (largo > 0) {
+    return `Largo ${largo.toFixed(2)} m`;
+  }
+
+  return "Sin definir";
+});
+
+const siteAreaLabel = computed(() => {
+  const area = Number(form.areaTerrenoM2 || 0);
+
+  if (area <= 0) {
+    return "";
+  }
+
+  return `${area.toFixed(2)} m² declarados`;
+});
 
 const nextStepLabel = computed(() => {
   if (form.modoDiseno === "dibujar") {
@@ -981,55 +1043,35 @@ const nextStepLabel = computed(() => {
 
 const topographyLabel = computed(
   () =>
-    topographyOptions.find(
-      (item) =>
-        item.value === form.topografia
-    )?.label || "Pendiente"
+    topographyOptions.find((item) => item.value === form.topografia)?.label || "Pendiente"
 );
 
 const accessLabel = computed(
-  () =>
-    accessOptions.find(
-      (item) =>
-        item.value === form.tipoAcceso
-    )?.label || "Pendiente"
+  () => accessOptions.find((item) => item.value === form.tipoAcceso)?.label || "Pendiente"
 );
 
 const terrainLabel = computed(
   () =>
-    terrainOptions.find(
-      (item) =>
-        item.value === form.condicionTerreno
-    )?.label || "Pendiente"
+    terrainOptions.find((item) => item.value === form.condicionTerreno)?.label ||
+    "Pendiente"
 );
 
 const structuralLabel = computed(
   () =>
-    structuralOptions.find(
-      (item) =>
-        item.value ===
-        form.sistemaEstructural
-    )?.label || "Pendiente"
+    structuralOptions.find((item) => item.value === form.sistemaEstructural)?.label ||
+    "Pendiente"
 );
 
 const structuralNote = computed(() => {
-  if (
-    form.sistemaEstructural ===
-    "tradicional"
-  ) {
+  if (form.sistemaEstructural === "tradicional") {
     return "Muros de carga";
   }
 
-  if (
-    form.sistemaEstructural ===
-    "concreto_reforzado"
-  ) {
+  if (form.sistemaEstructural === "concreto_reforzado") {
     return "Marcos de concreto";
   }
 
-  if (
-    form.sistemaEstructural === "mixta"
-  ) {
+  if (form.sistemaEstructural === "mixta") {
     return "Sistema combinado";
   }
 
@@ -1038,61 +1080,36 @@ const structuralNote = computed(() => {
 
 const foundationLabel = computed(
   () =>
-    foundationOptions.find(
-      (item) =>
-        item.value ===
-        form.tipoCimentacion
-    )?.label || "Pendiente"
+    foundationOptions.find((item) => item.value === form.tipoCimentacion)?.label ||
+    "Pendiente"
 );
 
 const slabLabel = computed(
-  () =>
-    slabOptions.find(
-      (item) =>
-        item.value === form.tipoLosa
-    )?.label || "Pendiente"
+  () => slabOptions.find((item) => item.value === form.tipoLosa)?.label || "Pendiente"
 );
 
 const showDemolitionBlock = computed(
-  () =>
-    form.condicionTerreno ===
-    "con_construccion_previa"
+  () => form.condicionTerreno === "con_construccion_previa"
 );
 
-const areaDemolicionCalculada =
-  computed(() => {
-    const ancho = Number(
-      form.demolicion.anchoDemolicionM || 0
-    );
+const areaDemolicionCalculada = computed(() => {
+  const ancho = Number(form.demolicion.anchoDemolicionM || 0);
 
-    const largo = Number(
-      form.demolicion.largoDemolicionM || 0
-    );
+  const largo = Number(form.demolicion.largoDemolicionM || 0);
 
-    if (ancho <= 0 || largo <= 0) {
-      return 0;
-    }
+  if (ancho <= 0 || largo <= 0) {
+    return 0;
+  }
 
-    return Number(
-      (ancho * largo).toFixed(2)
-    );
-  });
+  return Number((ancho * largo).toFixed(2));
+});
 
 const definedInstallations = computed(
-  () =>
-    Object.values(
-      form.instalaciones
-    ).filter(
-      (value) => value !== null
-    ).length
+  () => Object.values(form.instalaciones).filter((value) => value !== null).length
 );
 
 const designLabel = computed(
-  () =>
-    designOptions.find(
-      (item) =>
-        item.value === form.modoDiseno
-    )?.label || "Pendiente"
+  () => designOptions.find((item) => item.value === form.modoDiseno)?.label || "Pendiente"
 );
 
 /* =========================================================
@@ -1100,11 +1117,9 @@ const designLabel = computed(
    ========================================================= */
 
 function markPending() {
-  saveStatus.value =
-    "Cambios sin guardar";
+  saveStatus.value = "Cambios sin guardar";
 
-  saveDetail.value =
-    "Guarda los cambios para conservarlos";
+  saveDetail.value = "Guarda los cambios para conservarlos";
 }
 
 function selectTopography(value) {
@@ -1123,8 +1138,7 @@ function selectStructural(value) {
 }
 
 function toggleInstallation(key) {
-  const current =
-    form.instalaciones[key];
+  const current = form.instalaciones[key];
 
   if (current === null) {
     form.instalaciones[key] = true;
@@ -1154,125 +1168,81 @@ function installationStatus(value) {
    ========================================================= */
 
 function persistConfiguration() {
-  const previousEngineInputs =
-    storedGeneral.engineInputs || {};
+  const previousEngineInputs = storedGeneral.engineInputs || {};
 
   const normalizedFoundation =
-    form.tipoCimentacion === "por_definir"
-      ? ""
-      : form.tipoCimentacion;
+    form.tipoCimentacion === "por_definir" ? "" : form.tipoCimentacion;
 
   viviendaStore.setDatosGeneralesObra({
-    ...JSON.parse(
-      JSON.stringify(storedGeneral)
-    ),
+    ...JSON.parse(JSON.stringify(storedGeneral)),
 
-    sistemaEstructural:
-      form.sistemaEstructural,
+    anchoTerrenoM: form.anchoTerrenoM,
 
-    tipoCimentacion:
-      normalizedFoundation,
+    largoTerrenoM: form.largoTerrenoM,
+
+    areaTerrenoM2: form.areaTerrenoM2,
+
+    sistemaEstructural: form.sistemaEstructural,
+
+    tipoCimentacion: normalizedFoundation,
 
     tipoLosa: form.tipoLosa,
 
     engineInputs: {
-      ...JSON.parse(
-        JSON.stringify(
-          previousEngineInputs
-        )
-      ),
+      ...JSON.parse(JSON.stringify(previousEngineInputs)),
 
-      sistema_estructural:
-        form.sistemaEstructural,
+      sistema_estructural: form.sistemaEstructural,
 
-      tipo_cimentacion:
-        normalizedFoundation,
+      tipo_cimentacion: normalizedFoundation,
 
-      tipo_losa:
-        form.tipoLosa,
+      tipo_losa: form.tipoLosa,
 
-      modo_diseno:
-        form.modoDiseno,
+      modo_diseno: form.modoDiseno,
 
-      servicios_instalaciones:
-        JSON.parse(
-          JSON.stringify(
-            form.instalaciones
-          )
-        ),
+      servicios_instalaciones: JSON.parse(JSON.stringify(form.instalaciones)),
     },
   });
 
   viviendaStore.setPreliminares({
-    ...JSON.parse(
-      JSON.stringify(
-        storedPreliminares
-      )
-    ),
+    ...JSON.parse(JSON.stringify(storedPreliminares)),
 
-    topografia:
-      form.topografia === "por_definir"
-        ? ""
-        : form.topografia,
+    topografia: form.topografia === "por_definir" ? "" : form.topografia,
 
-    topografiaPendienteDefinicion:
-      form.topografia === "por_definir",
+    topografiaPendienteDefinicion: form.topografia === "por_definir",
 
-    pendienteProfundidadM:
-      form.pendienteProfundidadM,
+    pendienteProfundidadM: form.pendienteProfundidadM,
 
-    tipoAcceso:
-      form.tipoAcceso,
+    tipoAcceso: form.tipoAcceso,
 
     servicios: {
-      agua:
-        form.instalaciones.agua,
+      agua: form.instalaciones.agua,
 
-      energia:
-        form.instalaciones.energia,
+      energia: form.instalaciones.energia,
 
-      drenaje:
-        form.instalaciones.drenaje,
+      drenaje: form.instalaciones.drenaje,
     },
 
     configuracionInicial: {
-      sistemaEstructural:
-        form.sistemaEstructural,
+      sistemaEstructural: form.sistemaEstructural,
 
-      tipoCimentacion:
-        normalizedFoundation,
+      tipoCimentacion: normalizedFoundation,
 
-      cimentacionPendienteDefinicion:
-        form.tipoCimentacion ===
-        "por_definir",
+      cimentacionPendienteDefinicion: form.tipoCimentacion === "por_definir",
 
-      modoDiseno:
-        form.modoDiseno,
+      modoDiseno: form.modoDiseno,
 
-      instalaciones:
-        JSON.parse(
-          JSON.stringify(
-            form.instalaciones
-          )
-        ),
+      instalaciones: JSON.parse(JSON.stringify(form.instalaciones)),
     },
 
-    condicionTerreno:
-      form.condicionTerreno,
+    condicionTerreno: form.condicionTerreno,
 
-    demolicion:
-      showDemolitionBlock.value
-        ? {
-          ...JSON.parse(
-            JSON.stringify(
-              form.demolicion
-            )
-          ),
+    demolicion: showDemolitionBlock.value
+      ? {
+          ...JSON.parse(JSON.stringify(form.demolicion)),
 
-          areaDemolicionM2:
-            areaDemolicionCalculada.value,
+          areaDemolicionM2: areaDemolicionCalculada.value,
         }
-        : {
+      : {
           tipoDemolicion: "",
           tipoEstructuraExistente: "",
           nivelesExistentes: "",
@@ -1289,6 +1259,29 @@ function persistConfiguration() {
 
 function validateConfiguration() {
   error.value = "";
+  const anchoTerreno = Number(form.anchoTerrenoM || 0);
+
+  const largoTerreno = Number(form.largoTerrenoM || 0);
+
+  const areaTerreno = Number(form.areaTerrenoM2 || 0);
+
+  if (form.anchoTerrenoM !== "" && anchoTerreno <= 0) {
+    error.value = "El ancho del terreno debe ser mayor que cero.";
+
+    return false;
+  }
+
+  if (form.largoTerrenoM !== "" && largoTerreno <= 0) {
+    error.value = "El largo del terreno debe ser mayor que cero.";
+
+    return false;
+  }
+
+  if (form.areaTerrenoM2 !== "" && areaTerreno <= 0) {
+    error.value = "La superficie del terreno debe ser mayor que cero.";
+
+    return false;
+  }
 
   if (
     !form.topografia ||
@@ -1306,40 +1299,25 @@ function validateConfiguration() {
   }
 
   if (
-    form.topografia ===
-    "con_pendiente" &&
-    Number(
-      form.pendienteProfundidadM || 0
-    ) <= 0
+    form.topografia === "con_pendiente" &&
+    Number(form.pendienteProfundidadM || 0) <= 0
   ) {
-    error.value =
-      "Captura la profundidad o desnivel de referencia del terreno.";
+    error.value = "Captura la profundidad o desnivel de referencia del terreno.";
 
     return false;
   }
 
   if (showDemolitionBlock.value) {
-    const demolition =
-      form.demolicion;
+    const demolition = form.demolicion;
 
     if (
       !demolition.tipoDemolicion ||
       !demolition.tipoEstructuraExistente ||
-      Number(
-        demolition.nivelesExistentes ||
-        0
-      ) <= 0 ||
-      Number(
-        demolition.anchoDemolicionM ||
-        0
-      ) <= 0 ||
-      Number(
-        demolition.largoDemolicionM ||
-        0
-      ) <= 0
+      Number(demolition.nivelesExistentes || 0) <= 0 ||
+      Number(demolition.anchoDemolicionM || 0) <= 0 ||
+      Number(demolition.largoDemolicionM || 0) <= 0
     ) {
-      error.value =
-        "Completa los datos de la construcción existente y su demolición.";
+      error.value = "Completa los datos de la construcción existente y su demolición.";
 
       return false;
     }
@@ -1355,11 +1333,9 @@ function validateConfiguration() {
 function saveDraft() {
   persistConfiguration();
 
-  saveStatus.value =
-    "Cambios guardados";
+  saveStatus.value = "Cambios guardados";
 
-  saveDetail.value =
-    "Configuración almacenada";
+  saveDetail.value = "Configuración almacenada";
 }
 
 function continueFlow() {
@@ -1369,27 +1345,19 @@ function continueFlow() {
 
   persistConfiguration();
 
-  if (
-    form.modoDiseno === "subir_plano"
-  ) {
-    router.push(
-      "/vivienda/workflow/planos-revision/carga"
-    );
+  if (form.modoDiseno === "subir_plano") {
+    router.push("/vivienda/workflow/planos-revision/carga");
 
     return;
   }
 
-  router.push(
-    "/vivienda/workflow/diseno-vivienda/manual"
-  );
+  router.push("/vivienda/workflow/diseno-vivienda/manual");
 }
 
 function goBack() {
   persistConfiguration();
 
-  router.push(
-    "/vivienda/workflow/proyecto-alcance"
-  );
+  router.push("/vivienda/workflow/proyecto-alcance");
 }
 </script>
 
@@ -1398,15 +1366,13 @@ function goBack() {
   box-sizing: border-box;
 }
 
-
 /* =========================================================
    GRID
    ========================================================= */
 
 .content-grid {
   display: grid;
-  grid-template-columns:
-    minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 20px;
 }
 
@@ -1425,8 +1391,7 @@ function goBack() {
   border: 1px solid #bcc9dc;
   border-radius: 11px;
   background: #ffffff;
-  box-shadow:
-    0 3px 10px rgba(32, 55, 105, 0.03);
+  box-shadow: 0 3px 10px rgba(32, 55, 105, 0.03);
 }
 
 .form-section {
@@ -1448,10 +1413,7 @@ function goBack() {
   flex-shrink: 0;
   border: 1px solid #d2deef;
   border-radius: 10px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -1483,9 +1445,25 @@ function goBack() {
 
 .condition-grid {
   display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+}
+
+.site-dimensions-block {
+  grid-column: 1 / -1;
+}
+
+.site-dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.site-dimensions-note {
+  margin: 10px 0 0;
+  color: #7180a2;
+  font-size: 0.68rem;
+  line-height: 1.45;
 }
 
 .setting-block {
@@ -1518,23 +1496,19 @@ function goBack() {
 }
 
 .option-grid.two {
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .option-grid.three {
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .option-grid.four {
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .option-grid.terrain {
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .choice-card {
@@ -1551,10 +1525,7 @@ function goBack() {
   color: #162d70;
   text-align: center;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease,
     background 0.18s ease;
 }
 
@@ -1565,16 +1536,12 @@ function goBack() {
 .choice-card:hover {
   transform: translateY(-1px);
   border-color: #9db4dd;
-  box-shadow:
-    0 5px 14px rgba(44, 69, 126, 0.06);
+  box-shadow: 0 5px 14px rgba(44, 69, 126, 0.06);
 }
 
 .choice-card.selected {
   border-color: #075ff2;
-  background:
-    linear-gradient(135deg,
-      #f4f8ff,
-      #f8f5ff);
+  background: linear-gradient(135deg, #f4f8ff, #f8f5ff);
 }
 
 .selection-mark {
@@ -1608,10 +1575,7 @@ function goBack() {
   height: 48px;
   border: 1px solid #d7e1ef;
   border-radius: 11px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
 }
 
 .choice-card strong {
@@ -1674,8 +1638,7 @@ function goBack() {
 .field select:focus {
   outline: none;
   border-color: #075ff2;
-  box-shadow:
-    0 0 0 3px rgba(7, 95, 242, 0.1);
+  box-shadow: 0 0 0 3px rgba(7, 95, 242, 0.1);
 }
 
 .input-with-unit {
@@ -1756,7 +1719,7 @@ function goBack() {
   font-size: 0.92rem;
 }
 
-.subsection-heading>p {
+.subsection-heading > p {
   margin: 8px 0 14px;
   color: #7180a2;
   font-size: 0.73rem;
@@ -1764,8 +1727,7 @@ function goBack() {
 
 .demolition-grid {
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 11px;
 }
 
@@ -1775,8 +1737,7 @@ function goBack() {
 
 .installation-grid {
   display: grid;
-  grid-template-columns:
-    repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -1794,9 +1755,7 @@ function goBack() {
   background: #ffffff;
   color: #162d70;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
 .installation-card:hover {
@@ -1806,10 +1765,7 @@ function goBack() {
 
 .installation-card.yes {
   border-color: #075ff2;
-  background:
-    linear-gradient(135deg,
-      #f4f8ff,
-      #f8f5ff);
+  background: linear-gradient(135deg, #f4f8ff, #f8f5ff);
 }
 
 .installation-card.no {
@@ -1822,10 +1778,7 @@ function goBack() {
   display: grid;
   place-items: center;
   border-radius: 10px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -1858,7 +1811,7 @@ function goBack() {
   font-size: 0.69rem;
 }
 
-.installation-note>svg {
+.installation-note > svg {
   flex-shrink: 0;
   color: #075ff2;
 }
@@ -1873,8 +1826,7 @@ function goBack() {
 
 .design-options {
   display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -1882,8 +1834,7 @@ function goBack() {
   position: relative;
   min-height: 180px;
   display: grid;
-  grid-template-columns:
-    64px minmax(0, 1fr) 20px;
+  grid-template-columns: 64px minmax(0, 1fr) 20px;
   gap: 16px;
   align-items: center;
   padding: 20px;
@@ -1893,25 +1844,18 @@ function goBack() {
   color: #162d70;
   text-align: left;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .design-card:hover {
   transform: translateY(-2px);
   border-color: #9db4dd;
-  box-shadow:
-    0 8px 18px rgba(40, 66, 135, 0.07);
+  box-shadow: 0 8px 18px rgba(40, 66, 135, 0.07);
 }
 
 .design-card.selected {
   border-color: #075ff2;
-  background:
-    linear-gradient(135deg,
-      #f4f8ff,
-      #f8f5ff);
+  background: linear-gradient(135deg, #f4f8ff, #f8f5ff);
 }
 
 .design-icon {
@@ -1921,10 +1865,7 @@ function goBack() {
   place-items: center;
   border: 1px solid #d2deef;
   border-radius: 11px;
-  background:
-    linear-gradient(135deg,
-      #edf4ff,
-      #f3efff);
+  background: linear-gradient(135deg, #edf4ff, #f3efff);
   color: #075ff2;
 }
 
@@ -2012,10 +1953,7 @@ function goBack() {
   font-size: 0.84rem;
   font-weight: 750;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .back-btn:hover,
@@ -2040,16 +1978,12 @@ function goBack() {
 .continue-btn {
   min-width: 220px;
   border: 0;
-  background:
-    linear-gradient(90deg,
-      #075ff2,
-      #8421f1);
+  background: linear-gradient(90deg, #075ff2, #8421f1);
   color: #ffffff;
-  box-shadow:
-    0 7px 17px rgba(51, 69, 211, 0.2);
+  box-shadow: 0 7px 17px rgba(51, 69, 211, 0.2);
 }
 
-.continue-btn>span {
+.continue-btn > span {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -2057,8 +1991,7 @@ function goBack() {
 
 .continue-btn small {
   margin-top: 2px;
-  color:
-    rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.61rem;
 }
 
@@ -2102,7 +2035,7 @@ function goBack() {
   font-weight: 700;
 }
 
-.capture-badge>span {
+.capture-badge > span {
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -2150,10 +2083,7 @@ function goBack() {
   padding: 17px 15px;
   border: 1px solid #c9d4e6;
   border-radius: 10px;
-  background:
-    linear-gradient(135deg,
-      #f2f6ff,
-      #f7f4ff);
+  background: linear-gradient(135deg, #f2f6ff, #f7f4ff);
 }
 
 .next-icon {
@@ -2195,7 +2125,6 @@ function goBack() {
    ========================================================= */
 
 @media (max-width: 1180px) {
-
   .configuration-shell {
     padding-left: 24px;
     padding-right: 24px;
@@ -2214,25 +2143,24 @@ function goBack() {
   }
 
   .installation-grid {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 850px) {
-
   .condition-grid {
     grid-template-columns: 1fr;
   }
-
+  .site-dimensions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .access-block,
   .demolition-panel {
     grid-column: auto;
   }
 
   .option-grid.four {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .design-options {
@@ -2240,13 +2168,14 @@ function goBack() {
   }
 
   .demolition-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 620px) {
-
+  .site-dimensions-grid {
+    grid-template-columns: 1fr;
+  }
   .form-section,
   .summary-panel {
     padding: 18px;
@@ -2265,8 +2194,7 @@ function goBack() {
   }
 
   .design-card {
-    grid-template-columns:
-      50px minmax(0, 1fr) 20px;
+    grid-template-columns: 50px minmax(0, 1fr) 20px;
     padding: 16px;
   }
 
