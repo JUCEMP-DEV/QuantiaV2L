@@ -3151,10 +3151,6 @@ function continueFlow() {
     )
     : 0;
 
-  const terrainGeometry = normalizeGeometry(
-    editorState.value.terrain?.geometry,
-  );
-
   const firstThree = structural.slice(0, 3);
 
   const capturedSpatial = JSON.parse(JSON.stringify(store.estructuraEspacial || {}));
@@ -3163,21 +3159,8 @@ function continueFlow() {
   store.setDatosGeneralesObra({
     ...store.datosGeneralesObra,
 
-    anchoTerrenoM:
-      terrainGeometry?.type === "rectangle"
-        ? terrainGeometry.widthM
-        : "",
-
-    largoTerrenoM:
-      terrainGeometry?.type === "rectangle"
-        ? terrainGeometry.lengthM
-        : "",
-
-    areaTerrenoM2:
-      terrainGeometry
-        ? terrainGeometry.areaM2
-        : "",
-
+    // El área declarada del predio pertenece a 02.
+    // La geometría editada permanece en estructuraEspacial.terreno.
     areaConstruccionM2:
       totalAreaM2.value,
 
