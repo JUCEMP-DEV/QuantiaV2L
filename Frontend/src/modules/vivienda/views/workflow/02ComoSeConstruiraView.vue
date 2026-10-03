@@ -32,45 +32,11 @@
 
           <div class="condition-grid">
             <fieldset class="setting-block site-dimensions-block">
-              <legend>Dimensiones del terreno</legend>
+              <legend>Predio</legend>
 
-              <div class="site-dimensions-grid">
+              <div class="site-context-grid">
                 <label class="field">
-                  Ancho / frente
-
-                  <div class="input-with-unit">
-                    <input
-                      v-model="form.anchoTerrenoM"
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      placeholder="Ej. 8.00"
-                      @input="markPending"
-                    />
-
-                    <span>m</span>
-                  </div>
-                </label>
-
-                <label class="field">
-                  Largo / fondo
-
-                  <div class="input-with-unit">
-                    <input
-                      v-model="form.largoTerrenoM"
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      placeholder="Ej. 20.00"
-                      @input="markPending"
-                    />
-
-                    <span>m</span>
-                  </div>
-                </label>
-
-                <label class="field">
-                  Superficie del terreno
+                  Superficie del terreno *
 
                   <div class="input-with-unit">
                     <input
@@ -85,11 +51,99 @@
                     <span>m²</span>
                   </div>
                 </label>
+
+                <fieldset class="site-shape-block">
+                  <legend>Forma del terreno</legend>
+
+                  <div class="option-grid two">
+                    <button
+                      v-for="item in siteShapeOptions"
+                      :key="item.value"
+                      type="button"
+                      class="choice-card compact"
+                      :class="{ selected: form.geometriaPredio === item.value }"
+                      @click="
+                        form.geometriaPredio = item.value;
+                        markPending();
+                      "
+                    >
+                      <span class="selection-mark">
+                        <QuantiaIcon
+                          v-if="form.geometriaPredio === item.value"
+                          name="check"
+                          :size="11"
+                          :stroke-width="2.6"
+                        />
+                      </span>
+
+                      <strong>{{ item.label }}</strong>
+                    </button>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="site-boundaries-block">
+                <div class="site-boundaries-heading">
+                  <strong>Colindancias</strong>
+                  <span>Opcional</span>
+                </div>
+
+                <div class="site-boundaries-grid">
+                  <label class="field">
+                    Frente
+                    <input
+                      v-model.trim="form.colindanciasPredio.frente"
+                      type="text"
+                      placeholder="Ej. Calle, avenida o propiedad"
+                      @input="markPending"
+                    />
+                  </label>
+
+                  <label class="field">
+                    Fondo
+                    <input
+                      v-model.trim="form.colindanciasPredio.fondo"
+                      type="text"
+                      placeholder="Ej. Propiedad particular"
+                      @input="markPending"
+                    />
+                  </label>
+
+                  <label class="field">
+                    Lado izquierdo
+                    <input
+                      v-model.trim="form.colindanciasPredio.lateralIzquierdo"
+                      type="text"
+                      placeholder="Referencia conocida"
+                      @input="markPending"
+                    />
+                  </label>
+
+                  <label class="field">
+                    Lado derecho
+                    <input
+                      v-model.trim="form.colindanciasPredio.lateralDerecho"
+                      type="text"
+                      placeholder="Referencia conocida"
+                      @input="markPending"
+                    />
+                  </label>
+
+                  <label class="field full">
+                    Otras colindancias o referencias
+                    <input
+                      v-model.trim="form.colindanciasPredio.otras"
+                      type="text"
+                      placeholder="Solo si aplica"
+                      @input="markPending"
+                    />
+                  </label>
+                </div>
               </div>
 
               <p class="site-dimensions-note">
-                Captura los datos que conozcas del terreno. La superficie se conserva como
-                dato declarado y no se calcula automáticamente a partir del ancho y largo.
+                La superficie se conserva como dato declarado. La forma y las colindancias
+                se registran por separado para no asumir dimensiones que el usuario no declaró.
               </p>
             </fieldset>
 
@@ -668,13 +722,13 @@
           </div>
 
           <div class="summary-item">
-            <dt>Dimensiones del terreno</dt>
+            <dt>Predio</dt>
 
             <dd>
-              {{ siteDimensionsLabel }}
+              {{ siteAreaLabel }}
 
-              <small v-if="siteAreaLabel">
-                {{ siteAreaLabel }}
+              <small>
+                {{ siteGeometryLabel }} · {{ siteBoundariesLabel }}
               </small>
             </dd>
           </div>
@@ -767,11 +821,19 @@ const storedInstallations =
   viviendaStore.modulos?.instalaciones?.controles?.serviciosInstalaciones || {};
 
 const form = reactive({
-  anchoTerrenoM: storedGeneral.anchoTerrenoM ?? "",
-
-  largoTerrenoM: storedGeneral.largoTerrenoM ?? "",
-
   areaTerrenoM2: storedGeneral.areaTerrenoM2 ?? "",
+
+  geometriaPredio: storedGeneral.geometriaPredio || "",
+
+  colindanciasPredio: {
+    frente: storedGeneral.colindanciasPredio?.frente || "",
+    fondo: storedGeneral.colindanciasPredio?.fondo || "",
+    lateralIzquierdo:
+      storedGeneral.colindanciasPredio?.lateralIzquierdo || "",
+    lateralDerecho:
+      storedGeneral.colindanciasPredio?.lateralDerecho || "",
+    otras: storedGeneral.colindanciasPredio?.otras || "",
+  },
 
   topografia: storedPreliminares.topografia || "",
 
@@ -829,6 +891,17 @@ const saveDetail = ref("Sin cambios pendientes");
 /* =========================================================
    OPCIONES
    ========================================================= */
+
+const siteShapeOptions = [
+  {
+    value: "rectangular",
+    label: "Rectangular",
+  },
+  {
+    value: "varios_lados",
+    label: "Con varios lados",
+  },
+];
 
 const topographyOptions = [
   {
@@ -999,34 +1072,32 @@ const designOptions = [
 /* =========================================================
    COMPUTED
    ========================================================= */
-const siteDimensionsLabel = computed(() => {
-  const ancho = Number(form.anchoTerrenoM || 0);
-
-  const largo = Number(form.largoTerrenoM || 0);
-
-  if (ancho > 0 && largo > 0) {
-    return `${ancho.toFixed(2)} × ${largo.toFixed(2)} m`;
-  }
-
-  if (ancho > 0) {
-    return `Ancho ${ancho.toFixed(2)} m`;
-  }
-
-  if (largo > 0) {
-    return `Largo ${largo.toFixed(2)} m`;
-  }
-
-  return "Sin definir";
-});
-
 const siteAreaLabel = computed(() => {
   const area = Number(form.areaTerrenoM2 || 0);
 
   if (area <= 0) {
-    return "";
+    return "Sin superficie definida";
   }
 
   return `${area.toFixed(2)} m² declarados`;
+});
+
+const siteGeometryLabel = computed(() => {
+  const selected = siteShapeOptions.find(
+    (item) => item.value === form.geometriaPredio,
+  );
+
+  return selected?.label || "Forma sin definir";
+});
+
+const siteBoundariesLabel = computed(() => {
+  const count = Object.values(form.colindanciasPredio)
+    .filter((value) => String(value || "").trim())
+    .length;
+
+  return count
+    ? `${count} colindancia${count === 1 ? "" : "s"} declarada${count === 1 ? "" : "s"}`
+    : "Sin colindancias declaradas";
 });
 
 const nextStepLabel = computed(() => {
@@ -1169,18 +1240,24 @@ function installationStatus(value) {
 
 function persistConfiguration() {
   const previousEngineInputs = storedGeneral.engineInputs || {};
+  const preservedGeneral = JSON.parse(JSON.stringify(storedGeneral));
+
+  delete preservedGeneral.anchoTerrenoM;
+  delete preservedGeneral.largoTerrenoM;
 
   const normalizedFoundation =
     form.tipoCimentacion === "por_definir" ? "" : form.tipoCimentacion;
 
   viviendaStore.setDatosGeneralesObra({
-    ...JSON.parse(JSON.stringify(storedGeneral)),
-
-    anchoTerrenoM: form.anchoTerrenoM,
-
-    largoTerrenoM: form.largoTerrenoM,
+    ...preservedGeneral,
 
     areaTerrenoM2: form.areaTerrenoM2,
+
+    geometriaPredio: form.geometriaPredio,
+
+    colindanciasPredio: JSON.parse(
+      JSON.stringify(form.colindanciasPredio),
+    ),
 
     sistemaEstructural: form.sistemaEstructural,
 
@@ -1259,26 +1336,16 @@ function persistConfiguration() {
 
 function validateConfiguration() {
   error.value = "";
-  const anchoTerreno = Number(form.anchoTerrenoM || 0);
-
-  const largoTerreno = Number(form.largoTerrenoM || 0);
-
   const areaTerreno = Number(form.areaTerrenoM2 || 0);
 
-  if (form.anchoTerrenoM !== "" && anchoTerreno <= 0) {
-    error.value = "El ancho del terreno debe ser mayor que cero.";
+  if (areaTerreno <= 0) {
+    error.value = "Captura la superficie del terreno en m².";
 
     return false;
   }
 
-  if (form.largoTerrenoM !== "" && largoTerreno <= 0) {
-    error.value = "El largo del terreno debe ser mayor que cero.";
-
-    return false;
-  }
-
-  if (form.areaTerrenoM2 !== "" && areaTerreno <= 0) {
-    error.value = "La superficie del terreno debe ser mayor que cero.";
+  if (!form.geometriaPredio) {
+    error.value = "Selecciona la forma del terreno.";
 
     return false;
   }
@@ -1453,10 +1520,65 @@ function goBack() {
   grid-column: 1 / -1;
 }
 
-.site-dimensions-grid {
+.site-context-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.site-shape-block {
+  min-width: 0;
+  margin: 0;
+  padding: 11px;
+  border: 1px solid #d2deef;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.site-shape-block legend {
+  padding: 0 6px;
+  color: #52678d;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.site-shape-block .choice-card {
+  min-height: 62px;
+}
+
+.site-boundaries-block {
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px solid #dce4ef;
+}
+
+.site-boundaries-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.site-boundaries-heading strong {
+  color: #162d70;
+  font-size: 0.78rem;
+}
+
+.site-boundaries-heading span {
+  color: #7b87a7;
+  font-size: 0.66rem;
+}
+
+.site-boundaries-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 11px;
+}
+
+.site-boundaries-grid .full {
+  grid-column: 1 / -1;
 }
 
 .site-dimensions-note {
@@ -2151,8 +2273,13 @@ function goBack() {
   .condition-grid {
     grid-template-columns: 1fr;
   }
-  .site-dimensions-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .site-context-grid,
+  .site-boundaries-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-boundaries-grid .full {
+    grid-column: auto;
   }
   .access-block,
   .demolition-panel {
@@ -2173,7 +2300,8 @@ function goBack() {
 }
 
 @media (max-width: 620px) {
-  .site-dimensions-grid {
+  .site-context-grid,
+  .site-boundaries-grid {
     grid-template-columns: 1fr;
   }
   .form-section,
