@@ -111,11 +111,18 @@ export function buildProjectInputContext(store = {}) {
   );
 
   const services = {};
+  const declaredServices =
+    preliminares.configuracionInicial?.instalaciones || {};
+
   for (const key of ["agua", "drenaje", "energia", "gas", "telecomunicaciones"]) {
+    const value =
+      declaredServices[key] ??
+      preliminares.servicios?.[key];
+
     declared(
       services,
       key,
-      preliminares.servicios?.[key],
+      value,
       `site_conditions.services.${key}`,
       "02",
     );
