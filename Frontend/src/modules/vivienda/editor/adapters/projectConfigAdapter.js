@@ -1,11 +1,7 @@
 import {
   createLevel,
   createSourceInfo,
-  createTerrain,
 } from "../core/editorSchema";
-import {
-  rectFromXYWH,
-} from "../core/geometry";
 import {
   normalizeLevels,
 } from "../core/levels";
@@ -16,7 +12,7 @@ import {
  *
  * Reglas:
  * - terreno es opcional;
- * - solo se crea terreno si existen ancho Y largo válidos;
+ * - datosGeneralesObra no fabrica geometría del predio;
  * - no se inventan alturas;
  * - alturaPromedioM NO se reparte automáticamente entre niveles;
  * - no se crea azotea automáticamente por el simple hecho de existir N niveles;
@@ -36,7 +32,7 @@ export function extractProjectEditorConfig(
 
   const terrain =
     normalizeStoredTerrain(currentSpatial?.terreno) ||
-    buildTerrainFromDatosGenerales(datosGeneralesObra);
+    null;
 
   return {
     levels,
@@ -96,43 +92,6 @@ export function buildLevelsFromDatosGenerales(
   }
 
   return normalizeLevels(levels);
-}
-
-export function buildTerrainFromDatosGenerales(
-  datosGeneralesObra = {},
-) {
-  const widthM = positiveNumberOrNull(
-    datosGeneralesObra.anchoTerrenoM,
-  );
-
-  const lengthM = positiveNumberOrNull(
-    datosGeneralesObra.largoTerrenoM,
-  );
-
-  if (widthM == null || lengthM == null) {
-    return null;
-  }
-
-  const geometry = rectFromXYWH({
-    x: 0,
-    y: 0,
-    widthM,
-    lengthM,
-  });
-
-  return createTerrain({
-    shape: "rectangle",
-    geometry,
-    widthM,
-    lengthM,
-    orientationDeg: null,
-    confirmed: true,
-    source: createSourceInfo({
-      type: "manual",
-      state: "MANUAL",
-      note: "datosGeneralesObra",
-    }),
-  });
 }
 
 /**
