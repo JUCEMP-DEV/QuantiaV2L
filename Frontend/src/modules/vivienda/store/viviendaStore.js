@@ -165,9 +165,15 @@ function emptyResultado() {
 function emptyDatosGeneralesObra() {
   return {
     ubicacionProyecto: "",
-    anchoTerrenoM: "",
-    largoTerrenoM: "",
     areaTerrenoM2: "",
+    geometriaPredio: "",
+    colindanciasPredio: {
+      frente: "",
+      fondo: "",
+      lateralIzquierdo: "",
+      lateralDerecho: "",
+      otras: "",
+    },
     areaConstruccionPropuestaM2: "",
     areaConstruccionM2: "",
     niveles: "",
@@ -196,9 +202,11 @@ function toComparableDatosGeneralesObra(payload = {}) {
 
   return {
     ubicacionProyecto: text(payload.ubicacionProyecto),
-    anchoTerrenoM: number(payload.anchoTerrenoM),
-    largoTerrenoM: number(payload.largoTerrenoM),
     areaTerrenoM2: number(payload.areaTerrenoM2),
+    geometriaPredio: text(payload.geometriaPredio),
+    colindanciasPredio: JSON.stringify(
+      payload.colindanciasPredio || {}
+    ),
     areaConstruccionPropuestaM2: number(
       payload.areaConstruccionPropuestaM2
     ),
@@ -1207,19 +1215,19 @@ export const useViviendaStore =
               .ubicacionProyecto ||
 
           previousComparable
-            .anchoTerrenoM !==
-            nextComparable
-              .anchoTerrenoM ||
-
-          previousComparable
-            .largoTerrenoM !==
-            nextComparable
-              .largoTerrenoM ||
-
-          previousComparable
             .areaTerrenoM2 !==
             nextComparable
               .areaTerrenoM2 ||
+
+          previousComparable
+            .geometriaPredio !==
+            nextComparable
+              .geometriaPredio ||
+
+          previousComparable
+            .colindanciasPredio !==
+            nextComparable
+              .colindanciasPredio ||
 
           previousComparable
             .areaConstruccionPropuestaM2 !==
