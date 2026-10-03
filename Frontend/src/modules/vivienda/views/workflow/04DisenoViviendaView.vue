@@ -866,14 +866,6 @@ function normalizeSpace(item, index) {
 }
 
 const general = reactive({
-  anchoTerrenoM: toNumber(
-    store.datosGeneralesObra?.anchoTerrenoM,
-    0,
-  ),
-  largoTerrenoM: toNumber(
-    store.datosGeneralesObra?.largoTerrenoM,
-    0,
-  ),
   niveles: Math.max(
     0,
     Math.min(
@@ -899,11 +891,6 @@ const spatial = reactive({
   espacios: (store.estructuraEspacial?.espacios || [])
     .map(normalizeSpace),
 });
-
-const terrain = computed(() => ({
-  anchoM: general.anchoTerrenoM,
-  largoM: general.largoTerrenoM,
-}));
 
 const levelOptions = computed(() => {
   const options = [];
@@ -1105,17 +1092,15 @@ function sumKnownAreas(spaces) {
 
 const areaTerrenoM2 =
   computed(() => {
-    if (
-      general.anchoTerrenoM <= 0 ||
-      general.largoTerrenoM <= 0
-    ) {
-      return null;
-    }
+    const declaredArea =
+      toNullableNumber(
+        store.datosGeneralesObra?.areaTerrenoM2,
+      );
 
-    return roundMetric(
-      general.anchoTerrenoM *
-      general.largoTerrenoM,
-    );
+    return declaredArea !== null &&
+      declaredArea > 0
+      ? roundMetric(declaredArea)
+      : null;
   });
 
 const exteriorTypes = new Set([
@@ -1226,10 +1211,9 @@ const validationMessages = computed(() => {
   }
 
   if (
-    general.anchoTerrenoM <= 0 ||
-    general.largoTerrenoM <= 0
+    areaTerrenoM2.value === null
   ) {
-    messages.push("Faltan las dimensiones del terreno.");
+    messages.push("Falta la superficie declarada del terreno.");
   }
 
   if (!spatial.espacios.length) {
@@ -1680,15 +1664,7 @@ function continueFlow() {
   store.setDatosGeneralesObra({
     ...store.datosGeneralesObra,
 
-    anchoTerrenoM:
-      general.anchoTerrenoM,
-
-    largoTerrenoM:
-      general.largoTerrenoM,
-
-    areaTerrenoM2:
-      areaTerrenoM2.value,
-
+    // La superficie declarada del predio pertenece a 02 y no se recalcula aquí.
     areaConstruccionM2:
       totalAreaM2.value,
 
